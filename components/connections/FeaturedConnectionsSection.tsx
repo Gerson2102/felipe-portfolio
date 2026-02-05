@@ -1,0 +1,329 @@
+"use client";
+
+import { useState, useEffect, useRef, useCallback } from "react";
+import { motion } from "framer-motion";
+import { useInView } from "@/hooks/useInView";
+import { PhotoFrame } from "./PhotoFrame";
+import { ThumbnailNav } from "./ThumbnailNav";
+
+interface Connection {
+  src: string;
+  alt: string;
+  eventName: string;
+  personName: string;
+  personTitle: string;
+  location: string;
+}
+
+const connectionsData: Connection[] = [
+  {
+    src: "/images/connections/felipe-paolo-ardoino.webp",
+    alt: "Felipe with Paolo Ardoino, CEO of Tether",
+    eventName: "Plan B Forum 2024",
+    personName: "Paolo Ardoino",
+    personTitle: "Tether CEO",
+    location: "El Salvador",
+  },
+  {
+    src: "/images/connections/felipe-jack-mallers.webp",
+    alt: "Felipe with Jack Mallers, CEO of Strike",
+    eventName: "Plan B Forum 2024",
+    personName: "Jack Mallers",
+    personTitle: "Strike CEO",
+    location: "El Salvador",
+  },
+  {
+    src: "/images/connections/felipe-missuniverse.webp",
+    alt: "Felipe at Miss Universe Costa Rica",
+    eventName: "Miss Universe Costa Rica",
+    personName: "Beauty Industry",
+    personTitle: "Event Collaboration",
+    location: "Costa Rica",
+  },
+  {
+    src: "/images/connections/felipe-startup-house.webp",
+    alt: "Felipe at Dojo Coding x Starknet event",
+    eventName: "Dojo Coding x Starknet",
+    personName: "Developer Community",
+    personTitle: "Web3 Builders",
+    location: "Tech Hub",
+  },
+  {
+    src: "/images/connections/felipe-speaking6.webp",
+    alt: "Felipe at industry networking event",
+    eventName: "Industry Networking",
+    personName: "Crypto Leaders",
+    personTitle: "Industry Executives",
+    location: "Global",
+  },
+];
+
+export function FeaturedConnectionsSection() {
+  const { ref, isInView } = useInView({ threshold: 0.2, triggerOnce: true });
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [showCursor, setShowCursor] = useState(true);
+  const [blinkCount, setBlinkCount] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
+  const [startX, setStartX] = useState(0);
+  const [scrollLeft, setScrollLeft] = useState(0);
+
+  // Blinking cursor that stops after 2 blinks
+  useEffect(() => {
+    if (!isInView || blinkCount >= 4) {
+      setShowCursor(true);
+      return;
+    }
+
+    const interval = setInterval(() => {
+      setShowCursor((prev) => !prev);
+      setBlinkCount((prev) => prev + 1);
+    }, 500);
+
+    return () => clearInterval(interval);
+  }, [isInView, blinkCount]);
+
+  // Track scroll position to update current index
+  const handleScroll = useCallback(() => {
+    if (!scrollContainerRef.current) return;
+    const container = scrollContainerRef.current;
+    const scrollPosition = container.scrollLeft;
+    const itemWidth = container.scrollWidth / connectionsData.length;
+    const newIndex = Math.round(scrollPosition / itemWidth);
+    setCurrentIndex(Math.min(newIndex, connectionsData.length - 1));
+  }, []);
+
+  // Scroll to specific photo
+  const scrollToPhoto = useCallback((index: number) => {
+    if (!scrollContainerRef.current) return;
+    const container = scrollContainerRef.current;
+    const itemWidth = container.scrollWidth / connectionsData.length;
+    container.scrollTo({
+      left: index * itemWidth,
+      behavior: "smooth",
+    });
+    setCurrentIndex(index);
+  }, []);
+
+  // Mouse drag handlers
+  const handleMouseDown = (e: React.MouseEvent) => {
+    if (!scrollContainerRef.current) return;
+    setIsDragging(true);
+    setStartX(e.pageX - scrollContainerRef.current.offsetLeft);
+    setScrollLeft(scrollContainerRef.current.scrollLeft);
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isDragging || !scrollContainerRef.current) return;
+    e.preventDefault();
+    const x = e.pageX - scrollContainerRef.current.offsetLeft;
+    const walk = (x - startX) * 1.5;
+    scrollContainerRef.current.scrollLeft = scrollLeft - walk;
+  };
+
+  const handleMouseUp = () => {
+    setIsDragging(false);
+  };
+
+  const handleMouseLeave = () => {
+    setIsDragging(false);
+  };
+
+  const headlineWords = "Building Alongside the Best".split(" ");
+
+  return (
+    <section
+      id="connections"
+      ref={ref as React.RefObject<HTMLElement>}
+      className="connections-section relative py-20 lg:py-32 overflow-hidden"
+      style={{ backgroundColor: "var(--hero-bg-dark)" }}
+    >
+      <div className="mx-auto w-full max-w-7xl px-6 lg:px-8">
+        {/* Terminal-style badge */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.5 }}
+          className="mb-6 flex items-center justify-center"
+        >
+          <span
+            className="inline-flex items-center rounded-full px-4 py-1.5 text-xs font-medium tracking-[0.2em]"
+            style={{
+              backgroundColor: "var(--ath-green-dim)",
+              color: "var(--ath-green)",
+              border: "1px solid rgba(0, 255, 136, 0.3)",
+            }}
+          >
+            IN THE ARENA
+            <span
+              className="ml-1"
+              style={{
+                opacity: showCursor ? 1 : 0,
+                transition: "opacity 100ms",
+              }}
+            >
+              _
+            </span>
+          </span>
+        </motion.div>
+
+        {/* Word-by-word headline */}
+        <h2
+          className="mb-12 text-center text-[28px] font-bold leading-tight sm:text-[36px] md:text-[44px] lg:mb-16"
+          style={{
+            fontFamily: "var(--font-display)",
+            color: "var(--text-primary)",
+          }}
+        >
+          {headlineWords.map((word, index) => (
+            <motion.span
+              key={index}
+              initial={{ opacity: 0, y: 20 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{
+                duration: 0.4,
+                delay: 0.2 + index * 0.08,
+                ease: [0.4, 0, 0.2, 1],
+              }}
+              className="mr-[0.3em] inline-block"
+            >
+              {word}
+            </motion.span>
+          ))}
+        </h2>
+      </div>
+
+      {/* Horizontal scroll container */}
+      <div className="relative">
+        {/* Edge fade - left */}
+        <div
+          className="pointer-events-none absolute left-0 top-0 z-10 h-full"
+          style={{
+            background: "linear-gradient(to right, var(--hero-bg-dark), transparent)",
+            width: "var(--edge-fade-width, 100px)",
+          }}
+        />
+
+        {/* Edge fade - right */}
+        <div
+          className="pointer-events-none absolute right-0 top-0 z-10 h-full"
+          style={{
+            background: "linear-gradient(to left, var(--hero-bg-dark), transparent)",
+            width: "var(--edge-fade-width, 100px)",
+          }}
+        />
+
+        {/* Scrollable film strip */}
+        <div
+          ref={scrollContainerRef}
+          role="region"
+          aria-label="Featured connections photo gallery"
+          className="flex gap-4 md:gap-6 overflow-x-auto scrollbar-hide px-6 lg:px-8 py-4 cursor-grab active:cursor-grabbing"
+          style={{
+            scrollSnapType: "x mandatory",
+          }}
+          onScroll={handleScroll}
+          onMouseDown={handleMouseDown}
+          onMouseMove={handleMouseMove}
+          onMouseUp={handleMouseUp}
+          onMouseLeave={handleMouseLeave}
+        >
+          {/* Spacer for centering */}
+          <div className="flex-shrink-0 w-[calc((100vw-280px)/2)] md:w-[calc((100vw-400px)/2)]" />
+
+          {connectionsData.map((connection, index) => (
+            <div
+              key={index}
+              className="flex-shrink-0"
+              style={{ scrollSnapAlign: "center" }}
+            >
+              <PhotoFrame
+                src={connection.src}
+                alt={connection.alt}
+                eventName={connection.eventName}
+                personName={connection.personName}
+                personTitle={connection.personTitle}
+                location={connection.location}
+                index={index}
+                isInView={isInView}
+              />
+            </div>
+          ))}
+
+          {/* Spacer for centering */}
+          <div className="flex-shrink-0 w-[calc((100vw-280px)/2)] md:w-[calc((100vw-400px)/2)]" />
+        </div>
+      </div>
+
+      {/* Tablet scroll progress bar */}
+      <div className="hidden md:block lg:hidden mx-auto w-full max-w-7xl px-6 mt-4">
+        <div
+          className="relative h-1 w-full overflow-hidden rounded-full"
+          style={{ backgroundColor: "rgba(255, 255, 255, 0.1)" }}
+        >
+          <div
+            className="absolute top-0 left-0 h-full rounded-full transition-transform duration-300 ease-out"
+            style={{
+              width: `${100 / connectionsData.length}%`,
+              backgroundColor: "rgba(0, 255, 136, 0.5)",
+              transform: `translateX(${currentIndex * 100}%)`,
+            }}
+          />
+        </div>
+      </div>
+
+      {/* Thumbnail navigation */}
+      <div className="mx-auto w-full max-w-7xl px-6 lg:px-8">
+        <ThumbnailNav
+          photos={connectionsData.map((c) => ({ src: c.src, alt: c.alt }))}
+          currentIndex={currentIndex}
+          onSelect={scrollToPhoto}
+        />
+      </div>
+
+      {/* Mobile dots */}
+      <div className="md:hidden flex items-center justify-center gap-2 mt-6">
+        {connectionsData.map((_, index) => (
+          <button
+            key={index}
+            onClick={() => scrollToPhoto(index)}
+            className="flex items-center justify-center min-h-[44px] min-w-[44px]"
+            aria-label={`Go to photo ${index + 1}`}
+          >
+            <span
+              className="block w-2 h-2 rounded-full transition-all duration-300"
+              style={{
+                backgroundColor:
+                  index === currentIndex
+                    ? "var(--ath-green)"
+                    : "rgba(255, 255, 255, 0.3)",
+                boxShadow:
+                  index === currentIndex
+                    ? "0 0 8px var(--ath-green)"
+                    : "none",
+              }}
+            />
+          </button>
+        ))}
+      </div>
+
+      <style jsx>{`
+        .connections-section {
+          --edge-fade-width: 100px;
+        }
+
+        @media (max-width: 1024px) {
+          .connections-section {
+            --edge-fade-width: 60px;
+          }
+        }
+
+        @media (max-width: 640px) {
+          .connections-section {
+            --edge-fade-width: 40px;
+          }
+        }
+      `}</style>
+    </section>
+  );
+}
