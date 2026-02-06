@@ -18,7 +18,7 @@ const defaultMilestones: Milestone[] = [
   { year: "2015", label: "Started Trading", position: 0 },
   { year: "2017", label: "First Bull Run", position: 25 },
   { year: "2020", label: "Began Teaching", position: 50 },
-  { year: "2021", label: "ATH Academy", position: 75 },
+  { year: "2024", label: "ATH Academy", position: 75 },
   { year: "2025", label: "500+ Students", position: 100 },
 ];
 

@@ -16,9 +16,9 @@ export function AboutSection({
   sectionLabel = "ORIGIN STORY",
   headline = "From Curious Trader to Crypto Educator",
   paragraphs = [
-    "My journey into cryptocurrency began in 2015, driven by a fascination with blockchain technology and its potential to revolutionize finance. What started as personal exploration quickly became a passion for understanding market dynamics and investment strategies.",
-    "After navigating multiple market cycles—including the euphoric highs and devastating corrections—I realized that most people entering crypto lacked the foundational knowledge to succeed. They were making the same mistakes I had made years earlier.",
-    "That realization sparked my mission: to bridge the knowledge gap and empower others with the tools, strategies, and mindset needed to thrive in the volatile world of cryptocurrency.",
+    "With over 10 years of experience in crypto and blockchain, I created the first NFT collection in Costa Rica and have been a panelist at Blockchain Jungle. I combine my expertise in Web3 and digital marketing to take people from 0 to 100 in the crypto world.",
+    "Through the Technological Translation Method, I transform complex concepts into simple language and apply them practically to generate extraordinary returns. No jargon walls, no gatekeeping—just clear knowledge you can act on immediately.",
+    "A Gold Effie Award winner and ULACIT graduate, my innovative vision drives the educational mission of All Time High—shaping the next generation of crypto experts.",
   ],
   imageSrc = "/images/about/felipe-headshot.webp",
   imageAlt = "Felipe Esparragó",

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback, useRef, useMemo } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { useInView } from "@/hooks/useInView";
 import { TestimonialCard } from "./TestimonialCard";
 import type { Testimonial } from "./TestimonialCard";
@@ -45,14 +45,18 @@ const testimonialsData: Testimonial[] = [
   },
 ];
 
+const DEBOUNCE_MS = 350;
+
 export function TestimonialsSection() {
   const { ref, isInView } = useInView({ threshold: 0.2, triggerOnce: true });
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [isPaused, setIsPaused] = useState(false);
+  const [direction, setDirection] = useState<1 | -1>(1);
+  const [isAnimating, setIsAnimating] = useState(false);
   const [showCursor, setShowCursor] = useState(true);
   const [blinkCount, setBlinkCount] = useState(0);
   const touchStartX = useRef(0);
   const touchEndX = useRef(0);
+  const debounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const total = testimonialsData.length;
 
@@ -69,24 +73,44 @@ export function TestimonialsSection() {
     return () => clearInterval(interval);
   }, [isInView, blinkCount]);
 
-  const goToNext = useCallback(() => {
-    setCurrentIndex((prev) => (prev + 1) % total);
-  }, [total]);
-
-  const goToPrev = useCallback(() => {
-    setCurrentIndex((prev) => (prev - 1 + total) % total);
-  }, [total]);
-
-  const goToIndex = useCallback((index: number) => {
-    setCurrentIndex(index);
+  const startDebounce = useCallback(() => {
+    setIsAnimating(true);
+    if (debounceTimer.current) clearTimeout(debounceTimer.current);
+    debounceTimer.current = setTimeout(() => {
+      setIsAnimating(false);
+    }, DEBOUNCE_MS);
   }, []);
 
-  // Auto-advance every 7s, pause on hover
+  // Cleanup debounce timer on unmount
   useEffect(() => {
-    if (isPaused || !isInView) return;
-    const timer = setInterval(goToNext, 7000);
-    return () => clearInterval(timer);
-  }, [isPaused, isInView, goToNext]);
+    return () => {
+      if (debounceTimer.current) clearTimeout(debounceTimer.current);
+    };
+  }, []);
+
+  const goToNext = useCallback(() => {
+    if (isAnimating) return;
+    setDirection(1);
+    setCurrentIndex((prev) => (prev + 1) % total);
+    startDebounce();
+  }, [total, isAnimating, startDebounce]);
+
+  const goToPrev = useCallback(() => {
+    if (isAnimating) return;
+    setDirection(-1);
+    setCurrentIndex((prev) => (prev - 1 + total) % total);
+    startDebounce();
+  }, [total, isAnimating, startDebounce]);
+
+  const goToIndex = useCallback(
+    (index: number) => {
+      if (isAnimating) return;
+      setDirection(index > currentIndex ? 1 : -1);
+      setCurrentIndex(index);
+      startDebounce();
+    },
+    [isAnimating, startDebounce, currentIndex],
+  );
 
   // Visible triplet for desktop: [prev, current, next]
   const visibleIndices = useMemo(() => {
@@ -108,22 +132,22 @@ export function TestimonialsSection() {
     const diff = touchStartX.current - touchEndX.current;
     if (diff > 50) {
       goToNext();
-      setIsPaused(true);
     } else if (diff < -50) {
       goToPrev();
-      setIsPaused(true);
     }
   };
 
   const headlineWords = "Real People, Real Results".split(" ");
 
-  const chevronButton = (direction: "prev" | "next") => (
+  const chevronButton = (dir: "prev" | "next") => (
     <button
-      onClick={direction === "prev" ? goToPrev : goToNext}
+      onClick={dir === "prev" ? goToPrev : goToNext}
+      disabled={isAnimating}
       className="flex items-center justify-center flex-shrink-0 p-3 rounded-full transition-all duration-300 hover:scale-110"
       style={{
         backgroundColor: "rgba(255, 255, 255, 0.05)",
         border: "1px solid rgba(255, 255, 255, 0.1)",
+        opacity: isAnimating ? 0.5 : 1,
       }}
       onMouseEnter={(e) => {
         (e.currentTarget as HTMLButtonElement).style.backgroundColor =
@@ -133,7 +157,7 @@ export function TestimonialsSection() {
         (e.currentTarget as HTMLButtonElement).style.backgroundColor =
           "rgba(255, 255, 255, 0.05)";
       }}
-      aria-label={direction === "prev" ? "Previous testimonial" : "Next testimonial"}
+      aria-label={dir === "prev" ? "Previous testimonial" : "Next testimonial"}
     >
       <svg
         width="20"
@@ -146,7 +170,7 @@ export function TestimonialsSection() {
         strokeLinejoin="round"
       >
         <polyline
-          points={direction === "prev" ? "15 18 9 12 15 6" : "9 18 15 12 9 6"}
+          points={dir === "prev" ? "15 18 9 12 15 6" : "9 18 15 12 9 6"}
         />
       </svg>
     </button>
@@ -158,8 +182,6 @@ export function TestimonialsSection() {
       ref={ref as React.RefObject<HTMLElement>}
       className="relative py-20 lg:py-32 overflow-hidden"
       style={{ backgroundColor: "var(--hero-bg-base)" }}
-      onMouseEnter={() => setIsPaused(true)}
-      onMouseLeave={() => setIsPaused(false)}
     >
       <div className="mx-auto w-full max-w-7xl px-6 lg:px-8">
         {/* Terminal-style badge */}
@@ -226,23 +248,24 @@ export function TestimonialsSection() {
             {chevronButton("prev")}
 
             <div className="flex flex-1 min-w-0 items-start justify-center gap-8">
-              <AnimatePresence mode="popLayout">
-                {visibleIndices.map((i) => {
-                  const position =
-                    i === currentIndex
-                      ? "center"
-                      : i === visibleIndices[0]
-                        ? "left"
-                        : "right";
-                  return (
-                    <TestimonialCard
-                      key={`${i}-${testimonialsData[i].name}`}
-                      testimonial={testimonialsData[i]}
-                      position={position as "center" | "left" | "right"}
-                    />
-                  );
-                })}
-              </AnimatePresence>
+              <TestimonialCard
+                key="slot-left"
+                testimonial={testimonialsData[visibleIndices[0]]}
+                position="left"
+                direction={direction}
+              />
+              <TestimonialCard
+                key="slot-center"
+                testimonial={testimonialsData[visibleIndices[1]]}
+                position="center"
+                direction={direction}
+              />
+              <TestimonialCard
+                key="slot-right"
+                testimonial={testimonialsData[visibleIndices[2]]}
+                position="right"
+                direction={direction}
+              />
             </div>
 
             {chevronButton("next")}
@@ -253,13 +276,12 @@ export function TestimonialsSection() {
             {chevronButton("prev")}
 
             <div className="flex items-center justify-center" style={{ maxWidth: 420 }}>
-              <AnimatePresence mode="popLayout">
-                <TestimonialCard
-                  key={`mobile-${currentIndex}-${testimonialsData[currentIndex].name}`}
-                  testimonial={testimonialsData[currentIndex]}
-                  position="center"
-                />
-              </AnimatePresence>
+              <TestimonialCard
+                key="slot-single"
+                testimonial={testimonialsData[currentIndex]}
+                position="center"
+                direction={direction}
+              />
             </div>
 
             {chevronButton("next")}
@@ -271,40 +293,19 @@ export function TestimonialsSection() {
               className="flex items-center justify-center w-full"
               style={{ maxWidth: 420 }}
             >
-              <AnimatePresence mode="popLayout">
-                <TestimonialCard
-                  key={`sm-${currentIndex}-${testimonialsData[currentIndex].name}`}
-                  testimonial={testimonialsData[currentIndex]}
-                  position="center"
-                />
-              </AnimatePresence>
+              <TestimonialCard
+                key="slot-mobile"
+                testimonial={testimonialsData[currentIndex]}
+                position="center"
+                direction={direction}
+              />
             </div>
           </div>
         </div>
 
-        {/* Dots navigation + pause/play */}
-        <div className="mt-8 flex items-center justify-center gap-3">
+        {/* Dots navigation */}
+        <div className="mt-8 flex items-center justify-center">
           <CarouselDots total={total} current={currentIndex} onSelect={goToIndex} />
-          <button
-            onClick={() => setIsPaused((p) => !p)}
-            className="flex min-h-[44px] min-w-[44px] h-11 w-11 items-center justify-center rounded-full transition-all duration-200 hover:scale-110"
-            style={{
-              backgroundColor: "rgba(0, 255, 136, 0.1)",
-              border: "1px solid rgba(0, 255, 136, 0.2)",
-            }}
-            aria-label={isPaused ? "Play testimonial carousel" : "Pause testimonial carousel"}
-          >
-            {isPaused ? (
-              <svg width="12" height="14" viewBox="0 0 12 14" fill="var(--ath-green)">
-                <polygon points="0,0 12,7 0,14" />
-              </svg>
-            ) : (
-              <svg width="10" height="14" viewBox="0 0 10 14" fill="var(--ath-green)">
-                <rect x="0" y="0" width="3" height="14" />
-                <rect x="7" y="0" width="3" height="14" />
-              </svg>
-            )}
-          </button>
         </div>
 
         {/* Mobile swipe hint */}

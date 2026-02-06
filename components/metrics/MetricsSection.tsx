@@ -17,7 +17,9 @@ const defaultMetrics: Metric[] = [
   { end: 11, suffix: "+", label: "Years Experience" },
   { end: 500, suffix: "+", label: "Students Taught" },
   { end: 4, suffix: "", label: "Market Cycles" },
-  { end: 15, suffix: "+", label: "Countries Reached" },
+  { end: 50, suffix: "+", label: "Master Classes Recorded" },
+  { end: 6000, suffix: "+", label: "Hours of Coaching" },
+  { end: 2500, suffix: "+", label: "Live Sessions" },
 ];
 
 export function MetricsSection({ metrics = defaultMetrics }: MetricsSectionProps) {
@@ -30,12 +32,12 @@ export function MetricsSection({ metrics = defaultMetrics }: MetricsSectionProps
       className="relative py-16 lg:py-24"
       style={{ backgroundColor: "var(--hero-bg-base)" }}
     >
-      <div className="mx-auto w-full max-w-7xl px-6 lg:px-8">
-        <div className="grid grid-cols-2 gap-8 lg:grid-cols-4 lg:gap-0">
+      <div className="mx-auto w-full max-w-[90rem] px-6 lg:px-12">
+        <div className="grid grid-cols-2 gap-8 md:grid-cols-3 md:gap-0 lg:grid-cols-6 lg:gap-0">
           {metrics.map((metric, index) => (
             <div
               key={metric.label}
-              className={index < metrics.length - 1 ? "lg:border-r" : ""}
+              className={`px-4 lg:px-6 ${index < metrics.length - 1 ? "lg:border-r" : ""}`}
               style={{
                 borderColor: isInView
                   ? "rgba(255, 255, 255, 0.1)"
