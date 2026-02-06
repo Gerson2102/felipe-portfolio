@@ -2,29 +2,36 @@
 
 import { CarouselRow } from "./CarouselRow";
 
-// Row 1 (5 images)
+// Row 1 (7 images)
 const row1Images = [
   { src: "/images/carousel/felipe-speaking3.webp", alt: "Felipe speaking at conference" },
+  { src: "/images/carousel/felipe-missuniverse7.webp", alt: "Group photo at Miss Universe Costa Rica event" },
   { src: "/images/carousel/felipe-mountain.webp", alt: "Felipe mountain adventure" },
   { src: "/images/carousel/btc-100k.webp", alt: "Bitcoin reaching 100K milestone" },
+  { src: "/images/carousel/ath-bj4.webp", alt: "Felipe on stage at Blockchain Jungle, black and white" },
   { src: "/images/carousel/felipe-startup-house.webp", alt: "Felipe at Startup House" },
   { src: "/images/carousel/felipe-ath.webp", alt: "Felipe ATH moment" },
 ];
 
-// Row 2 (5 images)
+// Row 2 (8 images)
 const row2Images = [
   { src: "/images/carousel/felipe-speaking4.webp", alt: "Felipe keynote presentation" },
+  { src: "/images/carousel/felipe-missuniverse4.webp", alt: "Felipe at Miss Universe Organization meeting, outdoor formal attire" },
   { src: "/images/carousel/felipe-computer.webp", alt: "Felipe working on computer" },
+  { src: "/images/carousel/ath-bj1.webp", alt: "All Time High Academy booth at Blockchain Jungle" },
   { src: "/images/carousel/felipe-missuniverse.webp", alt: "Felipe at Miss Universe event" },
   { src: "/images/carousel/felipe-paolo-ardoino.webp", alt: "Felipe with Paolo Ardoino" },
+  { src: "/images/carousel/felipe-missuniverse2.webp", alt: "Felipe at Miss Universe Organization lounge meeting" },
   { src: "/images/carousel/bitcoin-genesis-block.webp", alt: "Bitcoin genesis block" },
 ];
 
-// Row 3 (6 images)
+// Row 3 (8 images)
 const row3Images = [
   { src: "/images/carousel/felipe-speaking2.webp", alt: "Felipe speaking engagement" },
+  { src: "/images/carousel/felipe-missuniverse3.webp", alt: "Miss Universe Organization document at meeting" },
   { src: "/images/carousel/felipe-speaking6.webp", alt: "Felipe panel discussion" },
   { src: "/images/carousel/ny-times-banks.webp", alt: "NY Times banks headline" },
+  { src: "/images/carousel/ath-bj2.webp", alt: "Audience view of Felipe's ATH presentation at Blockchain Jungle" },
   { src: "/images/carousel/felipe-jack-mallers.webp", alt: "Felipe with Jack Mallers" },
   { src: "/images/carousel/felipe-storms.webp", alt: "Felipe at Storms event" },
   { src: "/images/carousel/felipe-speaking-event.webp", alt: "Felipe at speaking event" },

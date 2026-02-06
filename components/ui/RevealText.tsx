@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ElementType, ReactNode } from "react";
+import { ElementType } from "react";
 
 interface RevealTextProps {
   text: string;
