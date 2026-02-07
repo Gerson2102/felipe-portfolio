@@ -13,24 +13,28 @@ interface Connection {
   personName: string;
   personTitle: string;
   location: string;
+  objectPosition?: string;
+  aspectRatio?: string;
 }
 
 const connectionsData: Connection[] = [
   {
     src: "/images/connections/felipe-paolo-ardoino.webp",
     alt: "Felipe with Paolo Ardoino, CEO of Tether",
-    eventName: "Plan B Forum 2024",
+    eventName: "Plan B Forum 2026",
     personName: "Paolo Ardoino",
     personTitle: "Tether CEO",
     location: "El Salvador",
+    objectPosition: "center top",
   },
   {
     src: "/images/connections/felipe-jack-mallers.webp",
     alt: "Felipe with Jack Mallers, CEO of Strike",
-    eventName: "Plan B Forum 2024",
+    eventName: "Plan B Forum 2026",
     personName: "Jack Mallers",
     personTitle: "Strike CEO",
     location: "El Salvador",
+    objectPosition: "center center",
   },
   {
     src: "/images/connections/felipe-missuniverse5.webp",
@@ -39,6 +43,7 @@ const connectionsData: Connection[] = [
     personName: "Beauty Industry",
     personTitle: "Event Collaboration",
     location: "Mexico",
+    objectPosition: "center center",
   },
   {
     src: "/images/connections/felipe-missuniverse6.webp",
@@ -47,6 +52,7 @@ const connectionsData: Connection[] = [
     personName: "Crowns of Time",
     personTitle: "NFT Collection Presentation",
     location: "Mexico",
+    objectPosition: "center top",
   },
   {
     src: "/images/connections/felipe-startup-house.webp",
@@ -54,7 +60,9 @@ const connectionsData: Connection[] = [
     eventName: "Dojo Coding x Starknet",
     personName: "Developer Community",
     personTitle: "Web3 Builders",
-    location: "Tech Hub",
+    location: "Nosara, Costa Rica",
+    objectPosition: "center center",
+    aspectRatio: "4/3",
   },
   {
     src: "/images/connections/ath-bj3.webp",
@@ -63,6 +71,7 @@ const connectionsData: Connection[] = [
     personName: "ATH Academy",
     personTitle: "Liana Stage Presentation",
     location: "Costa Rica",
+    objectPosition: "center center",
   },
   {
     src: "/images/connections/felipe-speaking6.webp",
@@ -71,12 +80,15 @@ const connectionsData: Connection[] = [
     personName: "Crypto Leaders",
     personTitle: "Industry Executives",
     location: "Global",
+    objectPosition: "center top",
   },
 ];
 
 export function FeaturedConnectionsSection() {
   const { ref, isInView } = useInView({ threshold: 0.2, triggerOnce: true });
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const scrollTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showCursor, setShowCursor] = useState(true);
   const [blinkCount, setBlinkCount] = useState(0);
@@ -99,23 +111,61 @@ export function FeaturedConnectionsSection() {
     return () => clearInterval(interval);
   }, [isInView, blinkCount]);
 
-  // Track scroll position to update current index
-  const handleScroll = useCallback(() => {
-    if (!scrollContainerRef.current) return;
+  // Find the card whose center is closest to the viewport center
+  const findClosestCard = useCallback(() => {
     const container = scrollContainerRef.current;
-    const scrollPosition = container.scrollLeft;
-    const itemWidth = container.scrollWidth / connectionsData.length;
-    const newIndex = Math.round(scrollPosition / itemWidth);
-    setCurrentIndex(Math.min(newIndex, connectionsData.length - 1));
+    if (!container) return;
+    const containerRect = container.getBoundingClientRect();
+    const viewportCenter = containerRect.left + containerRect.width / 2;
+
+    let closestIndex = 0;
+    let closestDistance = Infinity;
+
+    cardRefs.current.forEach((card, index) => {
+      if (!card) return;
+      const rect = card.getBoundingClientRect();
+      const cardCenter = rect.left + rect.width / 2;
+      const distance = Math.abs(cardCenter - viewportCenter);
+      if (distance < closestDistance) {
+        closestDistance = distance;
+        closestIndex = index;
+      }
+    });
+
+    setCurrentIndex(closestIndex);
   }, []);
 
-  // Scroll to specific photo
+  // Debounced scroll handler — waits for scroll to settle
+  const handleScroll = useCallback(() => {
+    if (scrollTimeoutRef.current) {
+      clearTimeout(scrollTimeoutRef.current);
+    }
+    scrollTimeoutRef.current = setTimeout(findClosestCard, 150);
+  }, [findClosestCard]);
+
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (scrollTimeoutRef.current) {
+        clearTimeout(scrollTimeoutRef.current);
+      }
+    };
+  }, []);
+
+  // Scroll to specific photo using actual card position
   const scrollToPhoto = useCallback((index: number) => {
-    if (!scrollContainerRef.current) return;
     const container = scrollContainerRef.current;
-    const itemWidth = container.scrollWidth / connectionsData.length;
+    const card = cardRefs.current[index];
+    if (!container || !card) return;
+    const containerRect = container.getBoundingClientRect();
+    const cardRect = card.getBoundingClientRect();
+    const scrollOffset =
+      cardRect.left -
+      containerRect.left -
+      (containerRect.width - cardRect.width) / 2 +
+      container.scrollLeft;
     container.scrollTo({
-      left: index * itemWidth,
+      left: scrollOffset,
       behavior: "smooth",
     });
     setCurrentIndex(index);
@@ -185,7 +235,7 @@ export function FeaturedConnectionsSection() {
 
         {/* Word-by-word headline */}
         <h2
-          className="mb-12 text-center text-[28px] font-bold leading-tight sm:text-[36px] md:text-[44px] lg:mb-16"
+          className="mb-6 text-center text-[28px] font-bold leading-tight sm:text-[36px] md:text-[44px] lg:mb-10"
           style={{
             fontFamily: "var(--font-display)",
             color: "var(--text-primary)",
@@ -245,11 +295,12 @@ export function FeaturedConnectionsSection() {
           onMouseLeave={handleMouseLeave}
         >
           {/* Spacer for centering */}
-          <div className="flex-shrink-0 w-[calc((100vw-280px)/2)] md:w-[calc((100vw-400px)/2)]" />
+          <div className="flex-shrink-0 w-[calc((100vw-256px)/2)] sm:w-[calc((100vw-296px)/2)] lg:w-[calc((100vw-336px)/2)]" />
 
           {connectionsData.map((connection, index) => (
             <div
               key={index}
+              ref={(el) => { cardRefs.current[index] = el; }}
               className="flex-shrink-0"
               style={{ scrollSnapAlign: "center" }}
             >
@@ -262,12 +313,14 @@ export function FeaturedConnectionsSection() {
                 location={connection.location}
                 index={index}
                 isInView={isInView}
+                objectPosition={connection.objectPosition}
+                aspectRatio={connection.aspectRatio}
               />
             </div>
           ))}
 
           {/* Spacer for centering */}
-          <div className="flex-shrink-0 w-[calc((100vw-280px)/2)] md:w-[calc((100vw-400px)/2)]" />
+          <div className="flex-shrink-0 w-[calc((100vw-256px)/2)] sm:w-[calc((100vw-296px)/2)] lg:w-[calc((100vw-336px)/2)]" />
         </div>
       </div>
 
@@ -336,7 +389,7 @@ export function FeaturedConnectionsSection() {
 
         @media (max-width: 640px) {
           .connections-section {
-            --edge-fade-width: 40px;
+            --edge-fade-width: 24px;
           }
         }
       `}</style>

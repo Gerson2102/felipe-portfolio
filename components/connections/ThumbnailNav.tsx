@@ -36,7 +36,7 @@ export function ThumbnailNav({ photos, currentIndex, onSelect }: ThumbnailNavPro
               scale: index === currentIndex ? 1 : 0.95,
             }}
             transition={{ duration: 0.3 }}
-            className="relative w-16 h-12 rounded-lg overflow-hidden"
+            className="relative w-12 h-[60px] rounded-lg overflow-hidden"
             style={{
               border:
                 index === currentIndex
@@ -53,7 +53,7 @@ export function ThumbnailNav({ photos, currentIndex, onSelect }: ThumbnailNavPro
               alt={photo.alt}
               fill
               className="object-cover"
-              sizes="64px"
+              sizes="48px"
               placeholder={blurMap[photo.src] ? "blur" : "empty"}
               blurDataURL={blurMap[photo.src]}
             />

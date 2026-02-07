@@ -14,6 +14,8 @@ interface PhotoFrameProps {
   location: string;
   index: number;
   isInView: boolean;
+  objectPosition?: string;
+  aspectRatio?: string;
 }
 
 export function PhotoFrame({
@@ -25,6 +27,8 @@ export function PhotoFrame({
   location,
   index,
   isInView,
+  objectPosition = "center center",
+  aspectRatio = "4/5",
 }: PhotoFrameProps) {
   const [isHovered, setIsHovered] = useState(false);
 
@@ -37,10 +41,9 @@ export function PhotoFrame({
         delay: 0.1 + index * 0.1,
         ease: [0.4, 0, 0.2, 1],
       }}
-      className="flex-shrink-0 relative rounded-xl overflow-hidden cursor-pointer"
+      className="flex-shrink-0 relative rounded-xl overflow-hidden cursor-pointer h-[320px] sm:h-[370px] lg:h-[420px]"
       style={{
-        width: "clamp(280px, 30vw, 400px)",
-        aspectRatio: "4/3",
+        aspectRatio,
       }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
@@ -59,7 +62,8 @@ export function PhotoFrame({
           alt={alt}
           fill
           className="object-cover"
-          sizes="(max-width: 768px) 85vw, 30vw"
+          style={{ objectPosition }}
+          sizes="(max-width: 640px) 70vw, (max-width: 1024px) 40vw, 32vw"
           placeholder={blurMap[src] ? "blur" : "empty"}
           blurDataURL={blurMap[src]}
         />
