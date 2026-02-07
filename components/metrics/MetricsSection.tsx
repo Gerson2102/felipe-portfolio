@@ -1,28 +1,25 @@
 "use client";
 
 import { useInView } from "@/hooks/useInView";
+import { useLanguage } from "@/lib/i18n/context";
 import { CountUpNumber } from "./CountUpNumber";
 
-interface Metric {
+interface MetricData {
   end: number;
   suffix: string;
-  label: string;
 }
 
-interface MetricsSectionProps {
-  metrics?: Metric[];
-}
-
-const defaultMetrics: Metric[] = [
-  { end: 11, suffix: "+", label: "Years Experience" },
-  { end: 500, suffix: "+", label: "Students Taught" },
-  { end: 4, suffix: "", label: "Market Cycles" },
-  { end: 50, suffix: "+", label: "Master Classes Recorded" },
-  { end: 6000, suffix: "+", label: "Hours of Coaching" },
-  { end: 2500, suffix: "+", label: "Live Sessions" },
+const metricValues: MetricData[] = [
+  { end: 11, suffix: "+" },
+  { end: 500, suffix: "+" },
+  { end: 4, suffix: "" },
+  { end: 50, suffix: "+" },
+  { end: 6000, suffix: "+" },
+  { end: 2500, suffix: "+" },
 ];
 
-export function MetricsSection({ metrics = defaultMetrics }: MetricsSectionProps) {
+export function MetricsSection() {
+  const { t } = useLanguage();
   const { ref, isInView } = useInView({ threshold: 0.1, triggerOnce: true });
 
   return (
@@ -34,10 +31,10 @@ export function MetricsSection({ metrics = defaultMetrics }: MetricsSectionProps
     >
       <div className="mx-auto w-full max-w-[90rem] px-6 lg:px-12">
         <div className="grid grid-cols-2 gap-8 md:grid-cols-3 md:gap-0 lg:grid-cols-6 lg:gap-0">
-          {metrics.map((metric, index) => (
+          {metricValues.map((metric, index) => (
             <div
-              key={metric.label}
-              className={`px-4 lg:px-6 ${index < metrics.length - 1 ? "lg:border-r" : ""}`}
+              key={index}
+              className={`px-4 lg:px-6 ${index < metricValues.length - 1 ? "lg:border-r" : ""}`}
               style={{
                 borderColor: isInView
                   ? "rgba(255, 255, 255, 0.1)"
@@ -48,7 +45,7 @@ export function MetricsSection({ metrics = defaultMetrics }: MetricsSectionProps
               <CountUpNumber
                 end={metric.end}
                 suffix={metric.suffix}
-                label={metric.label}
+                label={t(`metrics.${index}.label`)}
                 enabled={isInView}
                 delay={index * 150}
               />

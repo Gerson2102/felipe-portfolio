@@ -1,32 +1,21 @@
+"use client";
+
 import Image from "next/image";
 import { AnimatedBackground } from "./AnimatedBackground";
 import { TypingText } from "./TypingText";
 import { ShineButton } from "@/components/ui/ShineButton";
-import { TypingPhrase } from "@/hooks/useTypingEffect";
+import { useLanguage } from "@/lib/i18n/context";
 
+export function HeroSection() {
+  const { language, t } = useLanguage();
 
-interface HeroSectionProps {
-  eyebrow?: string;
-  headlineStart?: string;
-  typingPhrases?: TypingPhrase[];
-  description?: string;
-  imageSrc?: string;
-  imageAlt?: string;
-}
+  const typingPhrases = [
+    { text: t("hero.typing.0.text"), prefix: t("hero.typing.0.prefix") },
+    { text: t("hero.typing.1.text"), prefix: t("hero.typing.1.prefix") },
+    { text: t("hero.typing.2.text"), prefix: t("hero.typing.2.prefix") },
+    { text: t("hero.typing.3.text"), prefix: t("hero.typing.3.prefix") },
+  ];
 
-export function HeroSection({
-  eyebrow = "FELIPE ESPARRAGÓ",
-  headlineStart = "I'm ",
-  typingPhrases = [
-    { text: "Crypto Educator", prefix: "a " },
-    { text: "Blockchain Expert", prefix: "a " },
-    { text: "Investment Mentor", prefix: "an " },
-    { text: "Your Guide to ATH", prefix: "" },
-  ],
-  description = "Empowering individuals to navigate the world of cryptocurrency and blockchain technology. From understanding the fundamentals to advanced investment strategies, I help you build the knowledge and confidence to achieve financial freedom.",
-  imageSrc = "/images/hero/felipe-metrics.png",
-  imageAlt = "Felipe Esparragó",
-}: HeroSectionProps) {
   return (
     <section id="hero" className="relative min-h-screen overflow-x-hidden">
       <AnimatedBackground />
@@ -44,7 +33,7 @@ export function HeroSection({
                 animationFillMode: "forwards",
               }}
             >
-              {eyebrow}
+              {t("hero.eyebrow")}
             </span>
 
             {/* Headline */}
@@ -57,8 +46,8 @@ export function HeroSection({
                 animationFillMode: "forwards",
               }}
             >
-              {headlineStart}
-              <TypingText phrases={typingPhrases} />
+              {t("hero.headlineStart")}
+              <TypingText key={language} phrases={typingPhrases} />
             </h1>
 
             {/* Description */}
@@ -72,7 +61,7 @@ export function HeroSection({
                 animationFillMode: "forwards",
               }}
             >
-              {description}
+              {t("hero.description")}
             </p>
 
             {/* CTA Button */}
@@ -87,7 +76,7 @@ export function HeroSection({
                 variant="filled"
                 href="https://go.alltimehigh.academy/"
               >
-                Join the Academy
+                {t("hero.cta")}
               </ShineButton>
             </div>
           </div>
@@ -111,8 +100,8 @@ export function HeroSection({
                 }}
               >
                 <Image
-                  src={imageSrc}
-                  alt={imageAlt}
+                  src="/images/hero/felipe-metrics.png"
+                  alt="Felipe Esparrag\u00f3"
                   fill
                   className="object-contain object-bottom"
                   priority

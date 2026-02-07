@@ -1,91 +1,45 @@
 "use client";
 
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { motion } from "framer-motion";
 import { useInView } from "@/hooks/useInView";
+import { useLanguage } from "@/lib/i18n/context";
 import { PhotoFrame } from "./PhotoFrame";
 import { ThumbnailNav } from "./ThumbnailNav";
 
-interface Connection {
+interface ConnectionMeta {
   src: string;
   alt: string;
-  eventName: string;
-  personName: string;
-  personTitle: string;
-  location: string;
   objectPosition?: string;
   aspectRatio?: string;
 }
 
-const connectionsData: Connection[] = [
-  {
-    src: "/images/connections/felipe-paolo-ardoino.webp",
-    alt: "Felipe with Paolo Ardoino, CEO of Tether",
-    eventName: "Plan B Forum 2026",
-    personName: "Paolo Ardoino",
-    personTitle: "Tether CEO",
-    location: "El Salvador",
-    objectPosition: "center top",
-  },
-  {
-    src: "/images/connections/felipe-jack-mallers.webp",
-    alt: "Felipe with Jack Mallers, CEO of Strike",
-    eventName: "Plan B Forum 2026",
-    personName: "Jack Mallers",
-    personTitle: "Strike CEO",
-    location: "El Salvador",
-    objectPosition: "center center",
-  },
-  {
-    src: "/images/connections/felipe-missuniverse5.webp",
-    alt: "Felipe Esparragó at the 73rd Miss Universe stage",
-    eventName: "73rd Miss Universe",
-    personName: "Beauty Industry",
-    personTitle: "Event Collaboration",
-    location: "Mexico",
-    objectPosition: "center center",
-  },
-  {
-    src: "/images/connections/felipe-missuniverse6.webp",
-    alt: "Felipe presenting Crowns of Time NFT to Miss Universe winner",
-    eventName: "Miss Universe 73rd Edition",
-    personName: "Crowns of Time",
-    personTitle: "NFT Collection Presentation",
-    location: "Mexico",
-    objectPosition: "center top",
-  },
-  {
-    src: "/images/connections/felipe-startup-house.webp",
-    alt: "Felipe at Dojo Coding x Starknet event",
-    eventName: "Dojo Coding x Starknet",
-    personName: "Developer Community",
-    personTitle: "Web3 Builders",
-    location: "Nosara, Costa Rica",
-    objectPosition: "center center",
-    aspectRatio: "4/3",
-  },
-  {
-    src: "/images/connections/ath-bj3.webp",
-    alt: "Felipe Esparragó speaking at Blockchain Jungle on the Liana Stage",
-    eventName: "Blockchain Jungle 2024",
-    personName: "ATH Academy",
-    personTitle: "Liana Stage Presentation",
-    location: "Costa Rica",
-    objectPosition: "center center",
-  },
-  {
-    src: "/images/connections/felipe-speaking6.webp",
-    alt: "Felipe at industry networking event",
-    eventName: "Industry Networking",
-    personName: "Crypto Leaders",
-    personTitle: "Industry Executives",
-    location: "Global",
-    objectPosition: "center top",
-  },
+const connectionsMeta: ConnectionMeta[] = [
+  { src: "/images/connections/felipe-paolo-ardoino.webp", alt: "Felipe with Paolo Ardoino, CEO of Tether", objectPosition: "center top" },
+  { src: "/images/connections/felipe-jack-mallers.webp", alt: "Felipe with Jack Mallers, CEO of Strike", objectPosition: "center center" },
+  { src: "/images/connections/felipe-missuniverse5.webp", alt: "Felipe Esparrag\u00f3 at the 73rd Miss Universe stage", objectPosition: "center center" },
+  { src: "/images/connections/felipe-missuniverse6.webp", alt: "Felipe presenting Crowns of Time NFT to Miss Universe winner", objectPosition: "center top" },
+  { src: "/images/connections/felipe-startup-house.webp", alt: "Felipe at Dojo Coding x Starknet event", objectPosition: "center center", aspectRatio: "4/3" },
+  { src: "/images/connections/ath-bj3.webp", alt: "Felipe Esparrag\u00f3 speaking at Blockchain Jungle on the Liana Stage", objectPosition: "center center" },
+  { src: "/images/connections/felipe-speaking6.webp", alt: "Felipe at industry networking event", objectPosition: "center top" },
 ];
 
 export function FeaturedConnectionsSection() {
   const { ref, isInView } = useInView({ threshold: 0.2, triggerOnce: true });
+  const { t } = useLanguage();
+
+  const connectionsData = useMemo(
+    () =>
+      connectionsMeta.map((meta, i) => ({
+        ...meta,
+        eventName: t(`connections.${i}.eventName`),
+        personName: t(`connections.${i}.personName`),
+        personTitle: t(`connections.${i}.personTitle`),
+        location: t(`connections.${i}.location`),
+      })),
+    [t],
+  );
+
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
   const scrollTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -195,7 +149,7 @@ export function FeaturedConnectionsSection() {
     setIsDragging(false);
   };
 
-  const headlineWords = "Building Alongside the Best".split(" ");
+  const headlineWords = t("connections.headline").split(" ");
 
   return (
     <section
@@ -220,7 +174,7 @@ export function FeaturedConnectionsSection() {
               border: "1px solid rgba(0, 255, 136, 0.3)",
             }}
           >
-            IN THE ARENA
+            {t("connections.badge")}
             <span
               className="ml-1"
               style={{

@@ -9,6 +9,7 @@ import { FAQSection } from "@/components/faq";
 import { FinalCTASection } from "@/components/cta";
 import { Navbar } from "@/components/navbar";
 import { BackToTop } from "@/components/ui/BackToTop";
+import { FooterCredit } from "@/components/ui/FooterCredit";
 
 export default function Home() {
   return (
@@ -25,6 +26,7 @@ export default function Home() {
         <FAQSection />
         <FinalCTASection />
       </main>
+      <FooterCredit />
       <BackToTop />
     </>
   );

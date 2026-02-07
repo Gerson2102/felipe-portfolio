@@ -3,52 +3,30 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from "react";
 import { motion } from "framer-motion";
 import { useInView } from "@/hooks/useInView";
+import { useLanguage } from "@/lib/i18n/context";
 import { TestimonialCard } from "./TestimonialCard";
 import type { Testimonial } from "./TestimonialCard";
 import { CarouselDots } from "./CarouselDots";
 
-const testimonialsData: Testimonial[] = [
-  {
-    quote:
-      "Before joining the Academy, I was making emotional trades and panic selling at every dip. Felipe taught me to think in cycles, not days. Now I actually sleep at night knowing my strategy is sound.",
-    name: "Carlos M.",
-    context: "Academy Student, 2024",
-    metric: "8 months \u00b7 from panic selling to strategic holding",
-  },
-  {
-    quote:
-      "I was completely confused by all the conflicting advice online. The 1-on-1 mentorship cut through the noise. Felipe helped me build a plan that fits my risk tolerance and goals.",
-    name: "Mar\u00eda L.",
-    context: "1-on-1 Mentorship Client",
-    metric: "3 months \u00b7 from confused to confident",
-  },
-  {
-    quote:
-      "The structured curriculum in ATH Academy gave me what years of YouTube videos couldn\u2019t\u2014a real foundation. I finally understand why things move, not just that they move.",
-    name: "Andr\u00e9s R.",
-    context: "Academy Student, 2023",
-    metric: "1 year \u00b7 from scattered learning to structured growth",
-  },
-  {
-    quote:
-      "I started as a complete beginner with zero technical knowledge. The Academy\u2019s step-by-step approach made everything click. Now I research projects on my own and make decisions with confidence.",
-    name: "Luc\u00eda V.",
-    context: "Academy Student, 2024",
-    metric: "5 months \u00b7 from complete beginner to self-directed",
-  },
-  {
-    quote:
-      "The mentorship wasn\u2019t just theory\u2014Felipe helped me actually execute. We reviewed my portfolio together, identified weak spots, and built a system I still use today.",
-    name: "Diego P.",
-    context: "1-on-1 Mentorship Client",
-    metric: "6 months \u00b7 from theory to real-world execution",
-  },
-];
+const TESTIMONIAL_COUNT = 5;
 
 const DEBOUNCE_MS = 350;
 
 export function TestimonialsSection() {
   const { ref, isInView } = useInView({ threshold: 0.2, triggerOnce: true });
+  const { t } = useLanguage();
+
+  const testimonialsData: Testimonial[] = useMemo(
+    () =>
+      Array.from({ length: TESTIMONIAL_COUNT }, (_, i) => ({
+        quote: t(`testimonials.${i}.quote`),
+        name: t(`testimonials.${i}.name`),
+        context: t(`testimonials.${i}.context`),
+        metric: t(`testimonials.${i}.metric`),
+      })),
+    [t],
+  );
+
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState<1 | -1>(1);
   const [isAnimating, setIsAnimating] = useState(false);
@@ -137,7 +115,7 @@ export function TestimonialsSection() {
     }
   };
 
-  const headlineWords = "Real People, Real Results".split(" ");
+  const headlineWords = t("testimonials.headline").split(" ");
 
   const chevronButton = (dir: "prev" | "next") => (
     <button
@@ -199,7 +177,7 @@ export function TestimonialsSection() {
               border: "1px solid rgba(0, 255, 136, 0.3)",
             }}
           >
-            TESTIMONIALS
+            {t("testimonials.badge")}
             <span
               className="ml-1"
               style={{
@@ -316,7 +294,7 @@ export function TestimonialsSection() {
           className="text-center text-xs mt-4 md:hidden"
           style={{ color: "var(--text-muted)" }}
         >
-          Swipe to explore
+          {t("testimonials.swipe")}
         </motion.p>
       </div>
     </section>

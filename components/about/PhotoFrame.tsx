@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { blurMap } from "@/components/ui/blur-placeholders";
+import { useLanguage } from "@/lib/i18n/context";
 
 interface PhotoFrameProps {
   imageSrc?: string;
@@ -11,9 +12,10 @@ interface PhotoFrameProps {
 
 export function PhotoFrame({
   imageSrc = "/images/Felipe Headshot.png",
-  imageAlt = "Felipe Esparragó",
+  imageAlt = "Felipe Esparrag\u00f3",
   isInView = false,
 }: PhotoFrameProps) {
+  const { t } = useLanguage();
   return (
     <div className="relative flex items-center justify-center">
       {/* Container sizes: mobile 320px, tablet 360px, desktop 420px */}
@@ -93,7 +95,7 @@ export function PhotoFrame({
             className="text-sm font-semibold"
             style={{ color: "var(--ath-green)" }}
           >
-            Since 2015
+            {t("about.since")}
           </span>
         </div>
       </div>

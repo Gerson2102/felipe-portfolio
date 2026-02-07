@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useTimelineOrchestration } from "@/hooks/useTimelineOrchestration";
+import { useLanguage } from "@/lib/i18n/context";
 
 interface Milestone {
   year: string;
@@ -10,22 +11,21 @@ interface Milestone {
 }
 
 interface ProgressTimelineProps {
-  milestones?: Milestone[];
   isInView?: boolean;
 }
 
-const defaultMilestones: Milestone[] = [
-  { year: "2015", label: "Started Trading", position: 0 },
-  { year: "2017", label: "First Bull Run", position: 25 },
-  { year: "2020", label: "Began Teaching", position: 50 },
-  { year: "2024", label: "ATH Academy", position: 75 },
-  { year: "2025", label: "500+ Students", position: 100 },
-];
-
 export function ProgressTimeline({
-  milestones = defaultMilestones,
   isInView = false,
 }: ProgressTimelineProps) {
+  const { t } = useLanguage();
+
+  const milestones: Milestone[] = [
+    { year: "2015", label: t("timeline.0.label"), position: 0 },
+    { year: "2017", label: t("timeline.1.label"), position: 25 },
+    { year: "2020", label: t("timeline.2.label"), position: 50 },
+    { year: "2024", label: t("timeline.3.label"), position: 75 },
+    { year: "2025", label: t("timeline.4.label"), position: 100 },
+  ];
   const [isMobile, setIsMobile] = useState(false);
 
   const milestonePositions = milestones.map((m) => m.position);

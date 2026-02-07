@@ -17,17 +17,25 @@ No test framework is configured.
 
 ## Architecture
 
-Single-page portfolio site for a crypto educator. Next.js 16 (App Router), React 19, TypeScript (strict), Tailwind CSS v4, Framer Motion.
+Single-page portfolio site for Felipe Esparragó, crypto educator and founder of All Time High Academy. Next.js 16 (App Router), React 19, TypeScript (strict), Tailwind CSS v4, Framer Motion.
 
 ### Page Structure
 
-`app/page.tsx` renders 9 sections in sequence: Hero → ImageCarousel → About → Metrics → Testimonials → Services → FeaturedConnections → FAQ → FinalCTA. There are no other routes or API endpoints.
+`app/page.tsx` renders 9 sections in sequence: Hero → ImageCarousel → About → Metrics → Testimonials → Services → FeaturedConnections → FAQ → FinalCTA, followed by a footer credit line ("Made with ❤️ by @websites_by_ger" linking to Instagram). There are no other routes or API endpoints.
 
 ### Component Organization
 
 Components live in `components/` organized by feature section (hero/, about/, carousel/, metrics/, testimonials/, services/, connections/, faq/, cta/). Each folder has an `index.ts` barrel export. Shared primitives (ShineButton, RevealText, SocialLinks) are in `components/ui/`.
 
 All content data (testimonials, FAQs, services, carousel images, metrics) is hardcoded in the respective component files — there is no CMS, database, or API.
+
+### Key Content Data
+
+- **About section**: Real bio — 10+ years in crypto, creator of first NFT collection in Costa Rica, Blockchain Jungle panelist, Gold Effie Award winner, ULACIT graduate. Uses the "Technological Translation Method" to teach crypto.
+- **Timeline milestones**: 2015 (Started Trading) → 2017 (First Bull Run) → 2020 (Began Teaching) → 2024 (ATH Academy) → 2025 (500+ Students)
+- **Metrics**: 11+ Years Experience, 500+ Students Taught, 4 Market Cycles, 50+ Master Classes Recorded, 6000+ Hours of Coaching, 2500+ Live Sessions
+- **Services**: ATH Academy, 1-on-1 Mentorship, Speaking & Workshops
+- **CTA links**: `https://go.alltimehigh.academy/`
 
 ### Custom Hooks (`hooks/`)
 

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Space_Grotesk } from "next/font/google";
 import { MotionProvider } from "@/components/ui/MotionProvider";
+import { LanguageProvider } from "@/lib/i18n/context";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -36,7 +37,9 @@ export default function RootLayout({
         >
           Skip to content
         </a>
-        <MotionProvider>{children}</MotionProvider>
+        <LanguageProvider>
+          <MotionProvider>{children}</MotionProvider>
+        </LanguageProvider>
       </body>
     </html>
   );

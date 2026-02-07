@@ -4,6 +4,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { blurMap } from "@/components/ui/blur-placeholders";
+import { useLanguage } from "@/lib/i18n/context";
 
 interface PhotoFrameProps {
   src: string;
@@ -31,6 +32,7 @@ export function PhotoFrame({
   aspectRatio = "4/5",
 }: PhotoFrameProps) {
   const [isHovered, setIsHovered] = useState(false);
+  const { t } = useLanguage();
 
   return (
     <motion.div
@@ -97,7 +99,7 @@ export function PhotoFrame({
             color: "var(--text-secondary)",
           }}
         >
-          With {personName}, {personTitle}
+          {t("connections.with")} {personName}, {personTitle}
         </p>
         <span
           className="inline-flex items-center px-2 py-1 rounded-full text-xs"
@@ -135,7 +137,7 @@ export function PhotoFrame({
             color: "var(--text-secondary)",
           }}
         >
-          With {personName}
+          {t("connections.with")} {personName}
         </p>
       </div>
     </motion.div>

@@ -3,13 +3,10 @@
 import { useState, useEffect, useCallback, useRef, useSyncExternalStore } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { ShineButton } from "@/components/ui/ShineButton";
+import { LanguageToggle } from "@/components/ui/LanguageToggle";
+import { useLanguage } from "@/lib/i18n/context";
 
-const NAV_ITEMS = [
-  { label: "About", id: "about" },
-  { label: "Testimonials", id: "testimonials" },
-  { label: "Services", id: "services" },
-  { label: "FAQ", id: "faq" },
-] as const;
+const NAV_IDS = ["about", "testimonials", "services", "connections", "faq"] as const;
 
 function subscribeToMotionPref(callback: () => void) {
   const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -30,6 +27,7 @@ export function Navbar() {
   const [activeSection, setActiveSection] = useState("");
   const [mobileOpen, setMobileOpen] = useState(false);
   const reducedMotion = useSyncExternalStore(subscribeToMotionPref, getMotionPref, getMotionPrefServer);
+  const { t } = useLanguage();
   const observerRef = useRef<IntersectionObserver | null>(null);
 
   // Scroll detection for background transition
@@ -55,8 +53,8 @@ export function Navbar() {
       { threshold: 0.3, rootMargin: "-80px 0px 0px 0px" }
     );
 
-    const sections = NAV_ITEMS.map((item) =>
-      document.getElementById(item.id)
+    const sections = NAV_IDS.map((id) =>
+      document.getElementById(id)
     ).filter(Boolean) as HTMLElement[];
 
     sections.forEach((el) => observerRef.current?.observe(el));
@@ -144,42 +142,43 @@ export function Navbar() {
 
         {/* Desktop nav links */}
         <div className="hidden md:flex items-center gap-8">
-          {NAV_ITEMS.map((item) => (
+          {NAV_IDS.map((id) => (
             <button
-              key={item.id}
-              onClick={() => scrollToSection(item.id)}
+              key={id}
+              onClick={() => scrollToSection(id)}
               className="text-sm font-medium transition-colors duration-200"
               style={{
                 color:
-                  activeSection === item.id
+                  activeSection === id
                     ? "var(--ath-green)"
                     : "rgba(255, 255, 255, 0.5)",
               }}
               onMouseEnter={(e) => {
-                if (activeSection !== item.id) {
+                if (activeSection !== id) {
                   e.currentTarget.style.color = "rgba(255, 255, 255, 1)";
                 }
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.color =
-                  activeSection === item.id
+                  activeSection === id
                     ? "var(--ath-green)"
                     : "rgba(255, 255, 255, 0.5)";
               }}
             >
-              {item.label}
+              {t(`nav.${id}`)}
             </button>
           ))}
         </div>
 
-        {/* Desktop CTA */}
-        <div className="hidden md:block">
+        {/* Desktop language toggle + CTA */}
+        <div className="hidden md:flex items-center gap-4">
+          <LanguageToggle />
           <ShineButton
             variant="filled"
             href="https://go.alltimehigh.academy/"
             className="!px-5 !py-2.5 !text-sm !rounded-lg"
           >
-            Join Academy
+            {t("nav.cta")}
           </ShineButton>
         </div>
 
@@ -234,28 +233,31 @@ export function Navbar() {
             }}
           >
             <div className="px-6 pb-6 pt-2 flex flex-col gap-1">
-              {NAV_ITEMS.map((item) => (
+              {NAV_IDS.map((id) => (
                 <button
-                  key={item.id}
-                  onClick={() => scrollToSection(item.id)}
+                  key={id}
+                  onClick={() => scrollToSection(id)}
                   className="w-full text-left py-3 text-base font-medium transition-colors duration-200"
                   style={{
                     color:
-                      activeSection === item.id
+                      activeSection === id
                         ? "var(--ath-green)"
                         : "rgba(255, 255, 255, 0.5)",
                   }}
                 >
-                  {item.label}
+                  {t(`nav.${id}`)}
                 </button>
               ))}
+              <div className="pt-4 flex items-center justify-center">
+                <LanguageToggle />
+              </div>
               <div className="pt-3">
                 <ShineButton
                   variant="filled"
                   href="https://go.alltimehigh.academy/"
                   className="!w-full !px-5 !py-3 !text-sm !rounded-lg"
                 >
-                  Join Academy
+                  {t("nav.cta")}
                 </ShineButton>
               </div>
             </div>

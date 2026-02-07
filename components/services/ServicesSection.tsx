@@ -1,51 +1,35 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { motion } from "framer-motion";
 import { useInView } from "@/hooks/useInView";
+import { useLanguage } from "@/lib/i18n/context";
 import { ServiceCard } from "./ServiceCard";
 
 type IconVariant = "academy" | "mentorship" | "speaking";
 
-interface Service {
-  title: string;
-  description: string;
-  cta: string;
-  href: string;
-  iconVariant: IconVariant;
-}
-
-const servicesData: Service[] = [
-  {
-    title: "ATH Academy",
-    description:
-      "A structured education platform featuring comprehensive courses, live trading sessions, and a supportive community. Master cryptocurrency investing from fundamentals to advanced strategies.",
-    cta: "Explore Courses",
-    href: "https://go.alltimehigh.academy/",
-    iconVariant: "academy",
-  },
-  {
-    title: "1-on-1 Mentorship",
-    description:
-      "Personalized guidance tailored to your goals and portfolio. Get direct access to expert insights, strategy reviews, and accountability to accelerate your crypto journey.",
-    cta: "Book a Session",
-    href: "https://www.alltimehigh.academy/",
-    iconVariant: "mentorship",
-  },
-  {
-    title: "Speaking & Workshops",
-    description:
-      "Engaging presentations for conferences, corporate events, and educational workshops. Topics customized to your audience, from blockchain basics to market analysis.",
-    cta: "Inquire Now",
-    href: "https://www.instagram.com/fesparrago.ath/",
-    iconVariant: "speaking",
-  },
+const servicesMeta: { href: string; iconVariant: IconVariant }[] = [
+  { href: "https://go.alltimehigh.academy/", iconVariant: "academy" },
+  { href: "https://www.alltimehigh.academy/", iconVariant: "mentorship" },
+  { href: "https://www.instagram.com/fesparrago.ath/", iconVariant: "speaking" },
 ];
 
 export function ServicesSection() {
   const { ref, isInView } = useInView({ threshold: 0.2, triggerOnce: true });
+  const { t } = useLanguage();
   const [showCursor, setShowCursor] = useState(true);
   const [blinkCount, setBlinkCount] = useState(0);
+
+  const servicesData = useMemo(
+    () =>
+      servicesMeta.map((meta, i) => ({
+        title: t(`services.${i}.title`),
+        description: t(`services.${i}.description`),
+        cta: t(`services.${i}.cta`),
+        ...meta,
+      })),
+    [t],
+  );
 
   // Blinking cursor that stops after 2 blinks
   useEffect(() => {
@@ -62,7 +46,7 @@ export function ServicesSection() {
     return () => clearInterval(interval);
   }, [isInView, blinkCount]);
 
-  const headlineWords = "Elevate Your Crypto Knowledge".split(" ");
+  const headlineWords = t("services.headline").split(" ");
 
   return (
     <section
@@ -87,7 +71,7 @@ export function ServicesSection() {
               border: "1px solid rgba(0, 255, 136, 0.3)",
             }}
           >
-            SERVICES
+            {t("services.badge")}
             <span
               className="ml-1"
               style={{
@@ -129,7 +113,7 @@ export function ServicesSection() {
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-3 lg:gap-8">
           {servicesData.map((service, index) => (
             <ServiceCard
-              key={service.title}
+              key={index}
               title={service.title}
               description={service.description}
               cta={service.cta}

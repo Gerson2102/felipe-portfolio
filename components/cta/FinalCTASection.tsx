@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { useInView } from "@/hooks/useInView";
+import { useLanguage } from "@/lib/i18n/context";
 import { CTABackground } from "./CTABackground";
 import { PathCard } from "./PathCard";
 import { RevealText } from "@/components/ui/RevealText";
@@ -39,32 +40,29 @@ const MentorshipIcon = () => (
   </svg>
 );
 
-const quote =
-  "The best time to start was years ago. The second best time is right now. Let's get you to your all-time high.";
-const attribution = "— Felipe Esparragó";
-
-const academyCard = {
-  icon: <AcademyIcon />,
-  title: "Join the Academy",
-  description:
-    "Structured courses, live sessions, and a community of serious learners. Start building real knowledge and confidence in crypto — at your own pace.",
-  ctaText: "Explore the Academy",
-  ctaVariant: "filled" as const,
-  ctaHref: "https://go.alltimehigh.academy/",
-};
-
-const mentorshipCard = {
-  icon: <MentorshipIcon />,
-  title: "Book a Consultation",
-  description:
-    "Get personalized guidance from someone who's been in the trenches since 2015. One conversation can change your entire trajectory.",
-  ctaText: "Schedule a Call",
-  ctaVariant: "outline" as const,
-  ctaHref: "https://www.instagram.com/fesparrago.ath/",
-};
+const attribution = "\u2014 Felipe Esparrag\u00f3";
 
 export function FinalCTASection() {
   const { ref, isInView } = useInView({ threshold: 0.2 });
+  const { t } = useLanguage();
+
+  const academyCard = {
+    icon: <AcademyIcon />,
+    title: t("cta.academy.title"),
+    description: t("cta.academy.description"),
+    ctaText: t("cta.academy.cta"),
+    ctaVariant: "filled" as const,
+    ctaHref: "https://go.alltimehigh.academy/",
+  };
+
+  const mentorshipCard = {
+    icon: <MentorshipIcon />,
+    title: t("cta.mentorship.title"),
+    description: t("cta.mentorship.description"),
+    ctaText: t("cta.mentorship.cta"),
+    ctaVariant: "outline" as const,
+    ctaHref: "https://www.instagram.com/fesparrago.ath/",
+  };
 
   return (
     <section
@@ -78,7 +76,7 @@ export function FinalCTASection() {
         {/* Part 1: The Message */}
         <div className="mb-20 text-center md:mb-28">
           <RevealText
-            text={quote}
+            text={t("cta.quote")}
             isInView={isInView}
             staggerDelay={0.06}
             baseDelay={0}
@@ -132,7 +130,7 @@ export function FinalCTASection() {
             {/* Desktop: Vertical circle */}
             <div className="hidden h-12 w-12 items-center justify-center rounded-full border border-[rgba(255,255,255,0.1)] lg:flex">
               <span className="text-sm font-medium text-[rgba(255,255,255,0.4)]">
-                or
+                {t("cta.or")}
               </span>
             </div>
 
@@ -140,7 +138,7 @@ export function FinalCTASection() {
             <div className="flex w-full items-center gap-4 lg:hidden">
               <div className="h-[1px] flex-1 bg-[rgba(255,255,255,0.1)]" />
               <span className="text-sm font-medium text-[rgba(255,255,255,0.4)]">
-                or
+                {t("cta.or")}
               </span>
               <div className="h-[1px] flex-1 bg-[rgba(255,255,255,0.1)]" />
             </div>
@@ -167,7 +165,7 @@ export function FinalCTASection() {
             }}
             className="mb-8 text-lg text-[rgba(255,255,255,0.5)]"
           >
-            Ready to reach your ATH?
+            {t("cta.closer")}
           </motion.p>
 
           <SocialLinks isInView={isInView} baseDelay={1.5} />

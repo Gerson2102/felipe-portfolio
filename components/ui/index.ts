@@ -3,3 +3,5 @@ export { ShineButton } from "./ShineButton";
 export { SocialLinks } from "./SocialLinks";
 export { MotionProvider } from "./MotionProvider";
 export { BackToTop } from "./BackToTop";
+export { LanguageToggle } from "./LanguageToggle";
+export { FooterCredit } from "./FooterCredit";

@@ -1,48 +1,36 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { motion } from "framer-motion";
 import { useInView } from "@/hooks/useInView";
+import { useLanguage } from "@/lib/i18n/context";
 import { FAQCard } from "./FAQCard";
 
-const faqData = [
-  {
-    question: "What is ATH Academy?",
-    answer:
-      "ATH Academy is a comprehensive cryptocurrency education platform designed to take you from beginner to confident investor. It features structured courses, live trading sessions, community support, and proven strategies developed from years of market experience.",
-  },
-  {
-    question: "Who is this mentorship program for?",
-    answer:
-      "The mentorship program is ideal for anyone serious about cryptocurrency investing—whether you're just starting out or looking to refine your existing strategy. It's designed for individuals who want personalized guidance and accountability on their crypto journey.",
-  },
-  {
-    question: "How is Felipe's approach different from other crypto educators?",
-    answer:
-      "Unlike many educators who focus solely on hype or short-term gains, Felipe emphasizes risk management, market cycle awareness, and sustainable wealth building. His teaching is grounded in real experience navigating multiple bull and bear markets since 2015.",
-  },
-  {
-    question: "What can I expect from 1-on-1 mentorship sessions?",
-    answer:
-      "Each session is tailored to your specific goals and current portfolio. We cover portfolio analysis, entry and exit strategies, risk assessment, and market psychology. You'll receive actionable insights and a personalized roadmap for your investment journey.",
-  },
-  {
-    question: "Does Felipe offer corporate workshops or speaking engagements?",
-    answer:
-      "Yes! Felipe regularly speaks at conferences, corporate events, and workshops. Topics range from blockchain fundamentals to advanced trading strategies. Each presentation is customized to your audience's knowledge level and objectives.",
-  },
-  {
-    question: "How do I get started?",
-    answer:
-      "The best way to start is by exploring ATH Academy's free resources or booking an initial consultation call. From there, we can discuss which program best fits your goals—whether that's self-paced learning, group courses, or personalized mentorship.",
-  },
-];
+const FAQ_COUNT = 6;
 
 export function FAQSection() {
   const { ref, isInView } = useInView({ threshold: 0.2, triggerOnce: true });
+  const { language, t } = useLanguage();
+
+  const faqData = useMemo(
+    () =>
+      Array.from({ length: FAQ_COUNT }, (_, i) => ({
+        question: t(`faq.${i}.question`),
+        answer: t(`faq.${i}.answer`),
+      })),
+    [t],
+  );
+
   const [openIndex, setOpenIndex] = useState<number | null>(0);
   const [showCursor, setShowCursor] = useState(true);
   const [blinkCount, setBlinkCount] = useState(0);
+  const [prevLanguage, setPrevLanguage] = useState(language);
+
+  // Reset accordion on language change
+  if (prevLanguage !== language) {
+    setPrevLanguage(language);
+    setOpenIndex(0);
+  }
 
   // Blinking cursor that stops after 2 blinks
   useEffect(() => {
@@ -63,7 +51,7 @@ export function FAQSection() {
     setOpenIndex(openIndex === index ? null : index);
   };
 
-  const headlineWords = "Questions? We've Got Answers.".split(" ");
+  const headlineWords = t("faq.headline").split(" ");
 
   return (
     <section
@@ -88,7 +76,7 @@ export function FAQSection() {
               border: "1px solid rgba(0, 255, 136, 0.3)",
             }}
           >
-            FAQ
+            {t("faq.badge")}
             <span
               className="ml-1"
               style={{
