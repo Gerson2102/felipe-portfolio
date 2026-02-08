@@ -137,6 +137,14 @@ body {
   }
 }
 
+@keyframes heartbeat {
+  0%, 100% { transform: scale(1); }
+  14%      { transform: scale(1.3); }
+  28%      { transform: scale(1); }
+  42%      { transform: scale(1.3); }
+  70%      { transform: scale(1); }
+}
+
 /* Animation Classes */
 .animate-drift-up {
   animation: drift-up var(--drift-duration, 20s) linear infinite;
@@ -261,7 +269,8 @@ body {
   .animate-ring-ripple,
   .animate-pulse-orb,
   .animate-shine-sweep,
-  .animate-cta-breathe {
+  .animate-cta-breathe,
+  .animate-heartbeat {
     animation: none;
   }
 

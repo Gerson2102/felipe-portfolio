@@ -144,7 +144,8 @@ export const translations = {
     "cta.closer": "Ready to reach your ATH?",
 
     // Footer
-    "footer.credit": "Made with \u2764\uFE0F by",
+    "footer.madeWith": "Made with",
+    "footer.by": "by",
   },
   es: {
     // Navbar
@@ -291,7 +292,8 @@ export const translations = {
     "cta.closer": "\u00bfListo para alcanzar tu ATH?",
 
     // Footer
-    "footer.credit": "Hecho con \u2764\uFE0F por",
+    "footer.madeWith": "Hecho con",
+    "footer.by": "por",
   },
 } as const;
 
