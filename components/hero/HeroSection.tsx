@@ -100,7 +100,7 @@ export function HeroSection() {
                 }}
               >
                 <Image
-                  src="/images/hero/felipe-metrics.png"
+                  src="/images/hero/felipe-metrics.webp"
                   alt="Felipe Esparrag\u00f3"
                   fill
                   className="object-contain object-bottom"

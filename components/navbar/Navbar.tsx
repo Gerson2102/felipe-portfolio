@@ -134,24 +134,24 @@ export function Navbar() {
         {/* Logo */}
         <button
           onClick={scrollToTop}
-          className="text-xs font-medium tracking-[0.3em] uppercase transition-opacity duration-200 hover:opacity-80"
+          className="text-xs font-medium tracking-[0.3em] uppercase transition-opacity duration-200 hover:opacity-80 py-3"
           style={{ color: "var(--ath-green)" }}
         >
           FELIPE ESPARRAG&Oacute;
         </button>
 
         {/* Desktop nav links */}
-        <div className="hidden md:flex items-center gap-8">
+        <div className="hidden lg:flex items-center gap-8">
           {NAV_IDS.map((id) => (
             <button
               key={id}
               onClick={() => scrollToSection(id)}
-              className="text-sm font-medium transition-colors duration-200"
+              className="text-sm font-medium transition-colors duration-200 py-3"
               style={{
                 color:
                   activeSection === id
                     ? "var(--ath-green)"
-                    : "rgba(255, 255, 255, 0.5)",
+                    : "rgba(255, 255, 255, 0.6)",
               }}
               onMouseEnter={(e) => {
                 if (activeSection !== id) {
@@ -162,7 +162,7 @@ export function Navbar() {
                 e.currentTarget.style.color =
                   activeSection === id
                     ? "var(--ath-green)"
-                    : "rgba(255, 255, 255, 0.5)";
+                    : "rgba(255, 255, 255, 0.6)";
               }}
             >
               {t(`nav.${id}`)}
@@ -171,7 +171,7 @@ export function Navbar() {
         </div>
 
         {/* Desktop language toggle + CTA */}
-        <div className="hidden md:flex items-center gap-4">
+        <div className="hidden lg:flex items-center gap-4">
           <LanguageToggle />
           <ShineButton
             variant="filled"
@@ -184,7 +184,7 @@ export function Navbar() {
 
         {/* Mobile hamburger button */}
         <button
-          className="md:hidden flex flex-col items-center justify-center w-10 h-10 gap-[5px]"
+          className="lg:hidden flex flex-col items-center justify-center w-11 h-11 gap-[5px]"
           onClick={() => setMobileOpen((prev) => !prev)}
           aria-expanded={mobileOpen}
           aria-controls="mobile-nav-menu"
@@ -224,7 +224,7 @@ export function Navbar() {
             initial="hidden"
             animate="visible"
             exit="exit"
-            className="md:hidden overflow-hidden"
+            className="lg:hidden overflow-hidden"
             style={{
               backgroundColor: "rgba(5, 5, 5, 0.95)",
               backdropFilter: "blur(16px)",
@@ -242,7 +242,7 @@ export function Navbar() {
                     color:
                       activeSection === id
                         ? "var(--ath-green)"
-                        : "rgba(255, 255, 255, 0.5)",
+                        : "rgba(255, 255, 255, 0.6)",
                   }}
                 >
                   {t(`nav.${id}`)}

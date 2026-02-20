@@ -107,7 +107,7 @@ export function FinalCTASection() {
         </div>
 
         {/* Part 2: The Two Paths */}
-        <div className="relative mb-20 grid grid-cols-1 gap-8 md:mb-28 lg:grid-cols-[1fr_auto_1fr] lg:gap-6">
+        <div className="relative mb-20 grid grid-cols-1 gap-8 md:mb-28 md:grid-cols-[1fr_auto_1fr] md:gap-6">
           {/* Academy Card */}
           <PathCard
             {...academyCard}
@@ -128,14 +128,14 @@ export function FinalCTASection() {
             className="flex items-center justify-center"
           >
             {/* Desktop: Vertical circle */}
-            <div className="hidden h-12 w-12 items-center justify-center rounded-full border border-[rgba(255,255,255,0.1)] lg:flex">
+            <div className="hidden h-12 w-12 items-center justify-center rounded-full border border-[rgba(255,255,255,0.1)] md:flex">
               <span className="text-sm font-medium text-[rgba(255,255,255,0.4)]">
                 {t("cta.or")}
               </span>
             </div>
 
             {/* Mobile/Tablet: Horizontal line with "or" */}
-            <div className="flex w-full items-center gap-4 lg:hidden">
+            <div className="flex w-full items-center gap-4 md:hidden">
               <div className="h-[1px] flex-1 bg-[rgba(255,255,255,0.1)]" />
               <span className="text-sm font-medium text-[rgba(255,255,255,0.4)]">
                 {t("cta.or")}

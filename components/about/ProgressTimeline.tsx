@@ -1,8 +1,21 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useSyncExternalStore } from "react";
 import { useTimelineOrchestration } from "@/hooks/useTimelineOrchestration";
 import { useLanguage } from "@/lib/i18n/context";
+
+const MOBILE_QUERY = "(max-width: 767px)";
+function subscribeMobile(callback: () => void) {
+  const mq = window.matchMedia(MOBILE_QUERY);
+  mq.addEventListener("change", callback);
+  return () => mq.removeEventListener("change", callback);
+}
+function getSnapshotMobile() {
+  return window.matchMedia(MOBILE_QUERY).matches;
+}
+function getServerSnapshotMobile() {
+  return false;
+}
 
 interface Milestone {
   year: string;
@@ -26,7 +39,7 @@ export function ProgressTimeline({
     { year: "2024", label: t("timeline.3.label"), position: 75 },
     { year: "2025", label: t("timeline.4.label"), position: 100 },
   ];
-  const [isMobile, setIsMobile] = useState(false);
+  const isMobile = useSyncExternalStore(subscribeMobile, getSnapshotMobile, getServerSnapshotMobile);
 
   const milestonePositions = milestones.map((m) => m.position);
 
@@ -37,16 +50,6 @@ export function ProgressTimeline({
     pauseDuration: 600,
     finalPauseDuration: 1000,
   });
-
-  // Detect mobile breakpoint
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.matchMedia("(max-width: 767px)").matches);
-    };
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
-  }, []);
 
   if (isMobile) {
     return <MobileTimeline milestones={milestones} timelineState={timelineState} />;

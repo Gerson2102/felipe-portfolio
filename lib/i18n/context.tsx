@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useCallback, useSyncExternalStore } from "react";
+import { createContext, useContext, useCallback, useEffect, useSyncExternalStore } from "react";
 import type { Language, LanguageContextType } from "./types";
 import { translations } from "./translations";
 
@@ -41,6 +41,11 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     localStorage.setItem(STORAGE_KEY, lang);
     window.dispatchEvent(new Event(LANG_CHANGE_EVENT));
   }, []);
+
+  // Sync HTML lang attribute with selected language
+  useEffect(() => {
+    document.documentElement.lang = language;
+  }, [language]);
 
   const t = useCallback(
     (key: string): string => {

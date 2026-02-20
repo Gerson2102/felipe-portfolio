@@ -72,7 +72,6 @@ export function PhotoFrame({
             fill
             sizes="(max-width: 640px) 260px, (max-width: 1024px) 300px, 360px"
             className="object-cover object-center"
-            priority
             placeholder={blurMap[imageSrc] ? "blur" : "empty"}
             blurDataURL={blurMap[imageSrc]}
           />

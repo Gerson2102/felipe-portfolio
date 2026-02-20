@@ -7,7 +7,7 @@ export function FooterCredit() {
 
   return (
     <footer className="w-full text-center py-6 px-4 bg-[#050505]">
-      <p className="inline-flex items-center gap-1.5 text-[13px] text-white/35">
+      <p className="inline-flex items-center gap-1.5 text-[13px] text-white/50">
         <span>{t("footer.madeWith")}</span>
         <span
           className="inline-block text-red-500 animate-[heartbeat_1s_ease-in-out_infinite]"

@@ -26,6 +26,8 @@ export function BackToTop() {
         pointerEvents: visible ? "auto" : "none",
       }}
       aria-label="Back to top"
+      aria-hidden={!visible}
+      tabIndex={visible ? 0 : -1}
     >
       <svg
         width="18"

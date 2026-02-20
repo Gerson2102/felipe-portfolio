@@ -47,10 +47,9 @@ export function TestimonialCard({
   return (
     <motion.div
       animate={{
-        opacity: isCenter ? 1 : 0.55,
-        scale: isCenter ? 1 : 0.93,
+        opacity: isCenter ? 1 : 0.7,
+        scale: isCenter ? 1 : 0.88,
         y: isCenter ? 0 : 16,
-        filter: isCenter ? "blur(0px)" : "blur(1px)",
         width: isCenter ? 420 : 340,
         borderColor: isCenter
           ? "rgba(0, 255, 136, 0.3)"

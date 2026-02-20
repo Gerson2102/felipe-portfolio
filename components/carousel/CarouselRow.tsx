@@ -34,6 +34,8 @@ export function CarouselRow({
   const isVisibleRef = useRef(false);
   const positionRef = useRef<number | null>(null);
   const cachedSetWidthRef = useRef<number>(0);
+  const animationIdRef = useRef<number | null>(null);
+  const lastTimeRef = useRef<number>(0);
 
   // Cache setElement.offsetWidth and update on resize
   const updateCachedWidth = useCallback(() => {
@@ -42,10 +44,61 @@ export function CarouselRow({
     }
   }, []);
 
+  const startAnimation = useCallback(() => {
+    // Don't start if already running or conditions not met
+    if (animationIdRef.current !== null) return;
+    if (!isVisibleRef.current || isReducedMotionRef.current || isHoveredRef.current) return;
+
+    lastTimeRef.current = performance.now();
+
+    const animate = (currentTime: number) => {
+      const track = trackRef.current;
+      if (!track) return;
+
+      const deltaTime = (currentTime - lastTimeRef.current) / 1000;
+      lastTimeRef.current = currentTime;
+
+      // Stop if conditions changed
+      if (!isVisibleRef.current || isReducedMotionRef.current || isHoveredRef.current) {
+        animationIdRef.current = null;
+        return;
+      }
+
+      const setWidth = cachedSetWidthRef.current;
+      if (setWidth > 0) {
+        const pixelsPerSecond = setWidth / speed;
+
+        if (direction === "left") {
+          positionRef.current! -= pixelsPerSecond * deltaTime;
+          if (positionRef.current! <= -setWidth) {
+            positionRef.current! += setWidth;
+          }
+        } else {
+          positionRef.current! += pixelsPerSecond * deltaTime;
+          if (positionRef.current! >= 0) {
+            positionRef.current! -= setWidth;
+          }
+        }
+
+        track.style.transform = `translateX(${positionRef.current}px)`;
+      }
+
+      animationIdRef.current = requestAnimationFrame(animate);
+    };
+
+    animationIdRef.current = requestAnimationFrame(animate);
+  }, [direction, speed]);
+
+  const stopAnimation = useCallback(() => {
+    if (animationIdRef.current !== null) {
+      cancelAnimationFrame(animationIdRef.current);
+      animationIdRef.current = null;
+    }
+  }, []);
+
   useEffect(() => {
-    const track = trackRef.current;
     const setElement = setRef.current;
-    if (!track || !setElement) return;
+    if (!setElement) return;
 
     // Initial width cache
     cachedSetWidthRef.current = setElement.offsetWidth;
@@ -55,52 +108,17 @@ export function CarouselRow({
       positionRef.current = direction === "left" ? 0 : -cachedSetWidthRef.current;
     }
 
-    let lastTime = performance.now();
-    let animationId: number;
-
-    const animate = (currentTime: number) => {
-      const deltaTime = (currentTime - lastTime) / 1000;
-      lastTime = currentTime;
-
-      // Skip all work when not visible, reduced motion, or hovered
-      if (
-        isVisibleRef.current &&
-        !isReducedMotionRef.current &&
-        !isHoveredRef.current
-      ) {
-        const setWidth = cachedSetWidthRef.current;
-        if (setWidth > 0) {
-          const pixelsPerSecond = setWidth / speed;
-
-          if (direction === "left") {
-            positionRef.current! -= pixelsPerSecond * deltaTime;
-            if (positionRef.current! <= -setWidth) {
-              positionRef.current! += setWidth;
-            }
-          } else {
-            positionRef.current! += pixelsPerSecond * deltaTime;
-            if (positionRef.current! >= 0) {
-              positionRef.current! -= setWidth;
-            }
-          }
-
-          track.style.transform = `translateX(${positionRef.current}px)`;
-        }
-      }
-
-      animationId = requestAnimationFrame(animate);
-    };
-
-    animationId = requestAnimationFrame(animate);
+    // Try to start animation
+    startAnimation();
 
     // Update cached width on resize
     window.addEventListener("resize", updateCachedWidth);
 
     return () => {
-      cancelAnimationFrame(animationId);
+      stopAnimation();
       window.removeEventListener("resize", updateCachedWidth);
     };
-  }, [direction, speed, updateCachedWidth]);
+  }, [direction, startAnimation, stopAnimation, updateCachedWidth]);
 
   // Visibility-based pause via IntersectionObserver
   useEffect(() => {
@@ -110,13 +128,18 @@ export function CarouselRow({
     const observer = new IntersectionObserver(
       ([entry]) => {
         isVisibleRef.current = entry.isIntersecting;
+        if (entry.isIntersecting) {
+          startAnimation();
+        } else {
+          stopAnimation();
+        }
       },
       { rootMargin: "100px" }
     );
 
     observer.observe(row);
     return () => observer.disconnect();
-  }, []);
+  }, [startAnimation, stopAnimation]);
 
   // Reduced motion preference (separate from hover)
   useEffect(() => {
@@ -125,10 +148,25 @@ export function CarouselRow({
 
     const handler = (e: MediaQueryListEvent) => {
       isReducedMotionRef.current = e.matches;
+      if (e.matches) {
+        stopAnimation();
+      } else {
+        startAnimation();
+      }
     };
     mediaQuery.addEventListener("change", handler);
     return () => mediaQuery.removeEventListener("change", handler);
-  }, []);
+  }, [startAnimation, stopAnimation]);
+
+  const handleMouseEnter = useCallback(() => {
+    isHoveredRef.current = true;
+    stopAnimation();
+  }, [stopAnimation]);
+
+  const handleMouseLeave = useCallback(() => {
+    isHoveredRef.current = false;
+    startAnimation();
+  }, [startAnimation]);
 
   const renderImageSet = (keyPrefix: string, ref?: React.Ref<HTMLDivElement>) => (
     <div
@@ -173,8 +211,8 @@ export function CarouselRow({
           "--current-height": `${height}px`,
         } as React.CSSProperties
       }
-      onMouseEnter={() => (isHoveredRef.current = true)}
-      onMouseLeave={() => (isHoveredRef.current = false)}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
     >
       <div
         ref={trackRef}

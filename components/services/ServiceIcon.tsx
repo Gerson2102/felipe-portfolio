@@ -121,7 +121,7 @@ function SpeakingIcon({ isInView }: { isInView: boolean }) {
           animate={
             isInView
               ? {
-                  opacity: [0, 1, 0],
+                  opacity: [0.3, 1, 0.3],
                   scale: [0.5, 1, 1.2],
                 }
               : {}

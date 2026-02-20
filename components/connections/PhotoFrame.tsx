@@ -49,6 +49,11 @@ export function PhotoFrame({
       }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
+      onFocus={() => setIsHovered(true)}
+      onBlur={() => setIsHovered(false)}
+      tabIndex={0}
+      role="figure"
+      aria-label={`${eventName} - ${personName}, ${personTitle} - ${location}`}
     >
       {/* Photo */}
       <motion.div

@@ -7,11 +7,11 @@ export function LanguageToggle() {
 
   return (
     <div
-      className="relative inline-flex items-center gap-0.5 rounded-full p-0.5"
+      className="relative inline-flex items-center gap-0.5 rounded-full p-1"
       style={{
         border: "1px solid rgba(255, 255, 255, 0.1)",
         background: "rgba(255, 255, 255, 0.03)",
-        height: "32px",
+        height: "40px",
       }}
     >
       {(["en", "es"] as const).map((lang) => {
@@ -20,9 +20,9 @@ export function LanguageToggle() {
           <button
             key={lang}
             onClick={() => setLanguage(lang)}
-            className="relative z-10 flex items-center justify-center rounded-full px-3"
+            className="relative z-10 flex items-center justify-center rounded-full px-3.5"
             style={{
-              height: "26px",
+              height: "32px",
               fontSize: "12px",
               fontWeight: isActive ? 600 : 400,
               textTransform: "uppercase",

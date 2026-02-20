@@ -8,17 +8,16 @@ interface GlowCardProps {
 }
 
 export function GlowCard({ children, className = "" }: GlowCardProps) {
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [isHovering, setIsHovering] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
+  const glowRef = useRef<HTMLDivElement>(null);
 
   const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
-    if (!cardRef.current) return;
+    if (!cardRef.current || !glowRef.current) return;
     const rect = cardRef.current.getBoundingClientRect();
-    setMousePosition({
-      x: e.clientX - rect.left,
-      y: e.clientY - rect.top,
-    });
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    glowRef.current.style.background = `radial-gradient(400px circle at ${x}px ${y}px, rgba(0, 255, 136, 0.15), transparent 40%)`;
   }, []);
 
   const handleMouseEnter = useCallback(() => {
@@ -39,10 +38,10 @@ export function GlowCard({ children, className = "" }: GlowCardProps) {
     >
       {/* Cursor-following glow effect - disabled on touch devices via CSS */}
       <div
+        ref={glowRef}
         className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 hover-glow"
         style={{
           opacity: isHovering ? 1 : 0,
-          background: `radial-gradient(400px circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(0, 255, 136, 0.15), transparent 40%)`,
         }}
       />
       {children}

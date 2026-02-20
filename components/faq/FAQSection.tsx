@@ -10,7 +10,7 @@ const FAQ_COUNT = 6;
 
 export function FAQSection() {
   const { ref, isInView } = useInView({ threshold: 0.2, triggerOnce: true });
-  const { language, t } = useLanguage();
+  const { t } = useLanguage();
 
   const faqData = useMemo(
     () =>
@@ -24,13 +24,6 @@ export function FAQSection() {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
   const [showCursor, setShowCursor] = useState(true);
   const [blinkCount, setBlinkCount] = useState(0);
-  const [prevLanguage, setPrevLanguage] = useState(language);
-
-  // Reset accordion on language change
-  if (prevLanguage !== language) {
-    setPrevLanguage(language);
-    setOpenIndex(0);
-  }
 
   // Blinking cursor that stops after 2 blinks
   useEffect(() => {
