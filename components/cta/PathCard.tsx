@@ -24,7 +24,6 @@ export function PathCard({
   ctaText,
   ctaVariant,
   ctaHref,
-  index,
   isInView,
   gradientPosition = "left",
 }: PathCardProps) {

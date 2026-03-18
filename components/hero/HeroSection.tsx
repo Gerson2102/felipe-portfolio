@@ -1,5 +1,6 @@
 "use client";
 
+import { useMemo } from "react";
 import Image from "next/image";
 import { AnimatedBackground } from "./AnimatedBackground";
 import { TypingText } from "./TypingText";
@@ -9,12 +10,15 @@ import { useLanguage } from "@/lib/i18n/context";
 export function HeroSection() {
   const { language, t } = useLanguage();
 
-  const typingPhrases = [
-    { text: t("hero.typing.0.text"), prefix: t("hero.typing.0.prefix") },
-    { text: t("hero.typing.1.text"), prefix: t("hero.typing.1.prefix") },
-    { text: t("hero.typing.2.text"), prefix: t("hero.typing.2.prefix") },
-    { text: t("hero.typing.3.text"), prefix: t("hero.typing.3.prefix") },
-  ];
+  const typingPhrases = useMemo(
+    () => [
+      { text: t("hero.typing.0.text"), prefix: t("hero.typing.0.prefix") },
+      { text: t("hero.typing.1.text"), prefix: t("hero.typing.1.prefix") },
+      { text: t("hero.typing.2.text"), prefix: t("hero.typing.2.prefix") },
+      { text: t("hero.typing.3.text"), prefix: t("hero.typing.3.prefix") },
+    ],
+    [t],
+  );
 
   return (
     <section id="hero" className="relative min-h-screen overflow-x-hidden">

@@ -1,13 +1,13 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, startTransition } from "react";
 
 export function BackToTop() {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
-      setVisible(window.scrollY > 600);
+      startTransition(() => setVisible(window.scrollY > 600));
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
@@ -17,7 +17,7 @@ export function BackToTop() {
   return (
     <button
       onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-      className="fixed bottom-6 right-6 z-40 flex h-11 w-11 items-center justify-center rounded-full transition-all duration-300 hover:scale-110"
+      className="fixed bottom-6 right-6 z-40 flex h-11 w-11 items-center justify-center rounded-full transition-[transform,opacity,background-color] duration-300 hover:scale-110"
       style={{
         backgroundColor: "rgba(0, 255, 136, 0.1)",
         border: "1px solid rgba(0, 255, 136, 0.3)",
@@ -38,6 +38,7 @@ export function BackToTop() {
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
+        aria-hidden="true"
       >
         <polyline points="18 15 12 9 6 15" />
       </svg>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
+import { useReducedMotion } from "./useReducedMotion";
 
 interface UseProgressOptions {
   duration?: number;
@@ -25,22 +26,10 @@ export function useProgress({
   const [isComplete, setIsComplete] = useState(false);
   const startTimeRef = useRef<number | null>(null);
   const rafRef = useRef<number | null>(null);
+  const prefersReducedMotion = useReducedMotion();
 
   useEffect(() => {
-    // Respect reduced motion preference
-    const prefersReducedMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)"
-    ).matches;
-
-    if (prefersReducedMotion && enabled) {
-      setProgress(100);
-      setIsComplete(true);
-      return;
-    }
-
-    if (!enabled) {
-      return;
-    }
+    if (prefersReducedMotion || !enabled) return;
 
     const animate = (timestamp: number) => {
       if (startTimeRef.current === null) {
@@ -68,10 +57,10 @@ export function useProgress({
         cancelAnimationFrame(rafRef.current);
       }
     };
-  }, [duration, enabled]);
+  }, [duration, enabled, prefersReducedMotion]);
 
   return {
-    progress,
-    isComplete,
+    progress: prefersReducedMotion && enabled ? 100 : progress,
+    isComplete: prefersReducedMotion && enabled ? true : isComplete,
   };
 }

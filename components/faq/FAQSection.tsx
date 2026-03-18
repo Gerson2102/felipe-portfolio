@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import { motion } from "framer-motion";
 import { useInView } from "@/hooks/useInView";
 import { useLanguage } from "@/lib/i18n/context";
@@ -22,27 +22,21 @@ export function FAQSection() {
   );
 
   const [openIndex, setOpenIndex] = useState<number | null>(0);
-  const [showCursor, setShowCursor] = useState(true);
   const [blinkCount, setBlinkCount] = useState(0);
+  const showCursor = !isInView || blinkCount >= 4 || blinkCount % 2 === 0;
 
-  // Blinking cursor that stops after 2 blinks
+  // Blinking cursor that stops after 4 toggles (2 blinks)
   useEffect(() => {
-    if (!isInView || blinkCount >= 4) {
-      setShowCursor(true);
-      return;
-    }
-
+    if (!isInView || blinkCount >= 4) return;
     const interval = setInterval(() => {
-      setShowCursor((prev) => !prev);
       setBlinkCount((prev) => prev + 1);
     }, 500);
-
     return () => clearInterval(interval);
   }, [isInView, blinkCount]);
 
-  const handleToggle = (index: number) => {
-    setOpenIndex(openIndex === index ? null : index);
-  };
+  const handleToggle = useCallback((index: number) => {
+    setOpenIndex((prev) => (prev === index ? null : index));
+  }, []);
 
   const headlineWords = t("faq.headline").split(" ");
 

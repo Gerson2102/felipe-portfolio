@@ -17,8 +17,8 @@ const servicesMeta: { href: string; iconVariant: IconVariant }[] = [
 export function ServicesSection() {
   const { ref, isInView } = useInView({ threshold: 0.2, triggerOnce: true });
   const { t } = useLanguage();
-  const [showCursor, setShowCursor] = useState(true);
   const [blinkCount, setBlinkCount] = useState(0);
+  const showCursor = !isInView || blinkCount >= 4 || blinkCount % 2 === 0;
 
   const servicesData = useMemo(
     () =>
@@ -31,18 +31,12 @@ export function ServicesSection() {
     [t],
   );
 
-  // Blinking cursor that stops after 2 blinks
+  // Blinking cursor that stops after 4 toggles (2 blinks)
   useEffect(() => {
-    if (!isInView || blinkCount >= 4) {
-      setShowCursor(true);
-      return;
-    }
-
+    if (!isInView || blinkCount >= 4) return;
     const interval = setInterval(() => {
-      setShowCursor((prev) => !prev);
       setBlinkCount((prev) => prev + 1);
     }, 500);
-
     return () => clearInterval(interval);
   }, [isInView, blinkCount]);
 

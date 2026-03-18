@@ -30,22 +30,18 @@ export function TestimonialsSection() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState<1 | -1>(1);
   const [isAnimating, setIsAnimating] = useState(false);
-  const [showCursor, setShowCursor] = useState(true);
   const [blinkCount, setBlinkCount] = useState(0);
+  const showCursor = !isInView || blinkCount >= 4 || blinkCount % 2 === 0;
   const touchStartX = useRef(0);
   const touchEndX = useRef(0);
   const debounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const total = testimonialsData.length;
 
-  // Blinking cursor that stops after 2 blinks
+  // Blinking cursor that stops after 4 toggles (2 blinks)
   useEffect(() => {
-    if (!isInView || blinkCount >= 4) {
-      setShowCursor(true);
-      return;
-    }
+    if (!isInView || blinkCount >= 4) return;
     const interval = setInterval(() => {
-      setShowCursor((prev) => !prev);
       setBlinkCount((prev) => prev + 1);
     }, 500);
     return () => clearInterval(interval);
@@ -121,19 +117,9 @@ export function TestimonialsSection() {
     <button
       onClick={dir === "prev" ? goToPrev : goToNext}
       disabled={isAnimating}
-      className="flex items-center justify-center flex-shrink-0 p-3 rounded-full transition-all duration-300 hover:scale-110"
+      className="flex items-center justify-center flex-shrink-0 p-3 rounded-full bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.1)] transition-[transform,background-color,opacity] duration-300 hover:scale-110 hover:bg-[rgba(0,255,136,0.1)]"
       style={{
-        backgroundColor: "rgba(255, 255, 255, 0.05)",
-        border: "1px solid rgba(255, 255, 255, 0.1)",
         opacity: isAnimating ? 0.5 : 1,
-      }}
-      onMouseEnter={(e) => {
-        (e.currentTarget as HTMLButtonElement).style.backgroundColor =
-          "rgba(0, 255, 136, 0.1)";
-      }}
-      onMouseLeave={(e) => {
-        (e.currentTarget as HTMLButtonElement).style.backgroundColor =
-          "rgba(255, 255, 255, 0.05)";
       }}
       aria-label={dir === "prev" ? "Previous testimonial" : "Next testimonial"}
     >

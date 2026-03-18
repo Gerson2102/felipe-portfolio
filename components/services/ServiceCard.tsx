@@ -36,24 +36,9 @@ export function ServiceCard({
       }}
       className="h-full"
     >
-      <GlowCard className="group h-full rounded-2xl transition-all duration-300 hover:-translate-y-2">
+      <GlowCard className="group h-full rounded-2xl transition-transform duration-300 hover:-translate-y-2">
         <div
-          className="relative flex h-full flex-col p-6 sm:p-8"
-          style={{
-            backgroundColor: "rgba(255, 255, 255, 0.03)",
-            border: "1px solid rgba(255, 255, 255, 0.08)",
-            borderRadius: "1rem",
-            transition: "border-color 300ms ease-out, box-shadow 300ms ease-out",
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.borderColor = "rgba(0, 255, 136, 0.3)";
-            e.currentTarget.style.boxShadow =
-              "0 0 40px rgba(0, 255, 136, 0.15), 0 8px 30px rgba(0, 0, 0, 0.3)";
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.08)";
-            e.currentTarget.style.boxShadow = "none";
-          }}
+          className="relative flex h-full flex-col p-6 sm:p-8 rounded-2xl border border-[rgba(255,255,255,0.08)] bg-[rgba(255,255,255,0.03)] transition-[border-color,box-shadow] duration-300 ease-out hover:border-[rgba(0,255,136,0.3)] hover:shadow-[0_0_40px_rgba(0,255,136,0.15),0_8px_30px_rgba(0,0,0,0.3)]"
         >
           {/* Icon */}
           <div className="mb-5">
@@ -107,6 +92,7 @@ export function ServiceCard({
             >
               →
             </span>
+            <span className="sr-only"> (opens in new tab)</span>
           </a>
         </div>
       </GlowCard>

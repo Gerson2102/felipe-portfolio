@@ -1,6 +1,7 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Space_Grotesk } from "next/font/google";
 import { MotionProvider } from "@/components/ui/MotionProvider";
+import { SmoothScroll } from "@/components/ui/SmoothScroll";
 import { LanguageProvider } from "@/lib/i18n/context";
 import "./globals.css";
 
@@ -21,6 +22,10 @@ export const metadata: Metadata = {
     "Your guide to understanding blockchain technology, cryptocurrency investment strategies, and navigating the path to financial freedom.",
 };
 
+export const viewport: Viewport = {
+  themeColor: "#050505",
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -37,6 +42,7 @@ export default function RootLayout({
         >
           Skip to content
         </a>
+        <SmoothScroll />
         <LanguageProvider>
           <MotionProvider>{children}</MotionProvider>
         </LanguageProvider>

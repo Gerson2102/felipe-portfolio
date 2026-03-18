@@ -18,7 +18,7 @@ export function ShineButton({
   onClick,
 }: ShineButtonProps) {
   const baseStyles =
-    "relative inline-flex items-center justify-center px-8 py-4 text-base font-semibold rounded-lg overflow-hidden transition-all duration-300";
+    "relative inline-flex items-center justify-center px-8 py-4 text-base font-semibold rounded-lg overflow-hidden transition-[background-color,color,border-color,transform,box-shadow] duration-300";
 
   const variantStyles =
     variant === "filled"

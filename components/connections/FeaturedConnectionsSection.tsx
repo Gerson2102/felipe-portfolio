@@ -44,24 +44,18 @@ export function FeaturedConnectionsSection() {
   const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
   const scrollTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [showCursor, setShowCursor] = useState(true);
   const [blinkCount, setBlinkCount] = useState(0);
-  const [isDragging, setIsDragging] = useState(false);
-  const [startX, setStartX] = useState(0);
-  const [scrollLeft, setScrollLeft] = useState(0);
+  const showCursor = !isInView || blinkCount >= 4 || blinkCount % 2 === 0;
+  const isDraggingRef = useRef(false);
+  const startXRef = useRef(0);
+  const scrollLeftRef = useRef(0);
 
-  // Blinking cursor that stops after 2 blinks
+  // Blinking cursor that stops after 4 toggles (2 blinks)
   useEffect(() => {
-    if (!isInView || blinkCount >= 4) {
-      setShowCursor(true);
-      return;
-    }
-
+    if (!isInView || blinkCount >= 4) return;
     const interval = setInterval(() => {
-      setShowCursor((prev) => !prev);
       setBlinkCount((prev) => prev + 1);
     }, 500);
-
     return () => clearInterval(interval);
   }, [isInView, blinkCount]);
 
@@ -127,26 +121,30 @@ export function FeaturedConnectionsSection() {
 
   // Mouse drag handlers
   const handleMouseDown = (e: React.MouseEvent) => {
-    if (!scrollContainerRef.current) return;
-    setIsDragging(true);
-    setStartX(e.pageX - scrollContainerRef.current.offsetLeft);
-    setScrollLeft(scrollContainerRef.current.scrollLeft);
+    const container = scrollContainerRef.current;
+    if (!container) return;
+    isDraggingRef.current = true;
+    startXRef.current = e.pageX - container.offsetLeft;
+    scrollLeftRef.current = container.scrollLeft;
+    container.style.userSelect = "none";
+    (container.style as unknown as Record<string, string>).webkitUserSelect = "none";
   };
 
   const handleMouseMove = (e: React.MouseEvent) => {
-    if (!isDragging || !scrollContainerRef.current) return;
+    if (!isDraggingRef.current || !scrollContainerRef.current) return;
     e.preventDefault();
     const x = e.pageX - scrollContainerRef.current.offsetLeft;
-    const walk = (x - startX) * 1.5;
-    scrollContainerRef.current.scrollLeft = scrollLeft - walk;
+    const walk = (x - startXRef.current) * 1.5;
+    scrollContainerRef.current.scrollLeft = scrollLeftRef.current - walk;
   };
 
-  const handleMouseUp = () => {
-    setIsDragging(false);
-  };
-
-  const handleMouseLeave = () => {
-    setIsDragging(false);
+  const stopDragging = () => {
+    isDraggingRef.current = false;
+    const container = scrollContainerRef.current;
+    if (container) {
+      container.style.userSelect = "";
+      (container.style as unknown as Record<string, string>).webkitUserSelect = "";
+    }
   };
 
   const headlineWords = t("connections.headline").split(" ");
@@ -245,8 +243,8 @@ export function FeaturedConnectionsSection() {
           onScroll={handleScroll}
           onMouseDown={handleMouseDown}
           onMouseMove={handleMouseMove}
-          onMouseUp={handleMouseUp}
-          onMouseLeave={handleMouseLeave}
+          onMouseUp={stopDragging}
+          onMouseLeave={stopDragging}
         >
           {/* Spacer for centering */}
           <div className="flex-shrink-0 w-[calc((100vw-256px)/2)] sm:w-[calc((100vw-296px)/2)] lg:w-[calc((100vw-336px)/2)]" />

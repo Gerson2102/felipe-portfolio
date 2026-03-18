@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useReducedMotion } from "./useReducedMotion";
 
 interface UseInViewOptions {
   threshold?: number;
@@ -18,17 +19,10 @@ export function useInView({
 }: UseInViewOptions = {}): UseInViewReturn {
   const ref = useRef<HTMLElement | null>(null);
   const [isInView, setIsInView] = useState(false);
+  const prefersReducedMotion = useReducedMotion();
 
   useEffect(() => {
-    // Respect reduced motion preference
-    const prefersReducedMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)"
-    ).matches;
-
-    if (prefersReducedMotion) {
-      setIsInView(true);
-      return;
-    }
+    if (prefersReducedMotion) return;
 
     const element = ref.current;
     if (!element) return;
@@ -52,7 +46,7 @@ export function useInView({
     return () => {
       observer.disconnect();
     };
-  }, [threshold, triggerOnce]);
+  }, [threshold, triggerOnce, prefersReducedMotion]);
 
-  return { ref, isInView };
+  return { ref, isInView: prefersReducedMotion || isInView };
 }

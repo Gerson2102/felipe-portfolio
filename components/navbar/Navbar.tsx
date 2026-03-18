@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback, useRef, useSyncExternalStore } from "react";
+import { useState, useEffect, useCallback, useRef, useMemo, useSyncExternalStore, startTransition } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { ShineButton } from "@/components/ui/ShineButton";
 import { LanguageToggle } from "@/components/ui/LanguageToggle";
@@ -22,6 +22,8 @@ function getMotionPrefServer() {
   return false;
 }
 
+const MENU_EASE = [0.25, 0.1, 0.25, 1] as const;
+
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState("");
@@ -33,7 +35,7 @@ export function Navbar() {
   // Scroll detection for background transition
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
+      startTransition(() => setScrolled(window.scrollY > 50));
     };
     handleScroll();
     window.addEventListener("scroll", handleScroll, { passive: true });
@@ -79,13 +81,13 @@ export function Navbar() {
   // Close mobile menu on Escape key
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape" && mobileOpen) {
+      if (e.key === "Escape") {
         setMobileOpen(false);
       }
     };
     document.addEventListener("keydown", handleKey);
     return () => document.removeEventListener("keydown", handleKey);
-  }, [mobileOpen]);
+  }, []);
 
   const scrollToSection = useCallback(
     (id: string) => {
@@ -100,27 +102,30 @@ export function Navbar() {
     setMobileOpen(false);
   }, [reducedMotion]);
 
-  const ease = [0.25, 0.1, 0.25, 1] as const;
-  const mobileMenuVariants = reducedMotion
-    ? { hidden: { opacity: 0 }, visible: { opacity: 1 }, exit: { opacity: 0 } }
-    : {
-        hidden: { opacity: 0, height: 0 },
-        visible: {
-          opacity: 1,
-          height: "auto" as const,
-          transition: { duration: 0.3, ease },
-        },
-        exit: {
-          opacity: 0,
-          height: 0,
-          transition: { duration: 0.2, ease },
-        },
-      };
+  const mobileMenuVariants = useMemo(
+    () =>
+      reducedMotion
+        ? { hidden: { opacity: 0 }, visible: { opacity: 1 }, exit: { opacity: 0 } }
+        : {
+            hidden: { opacity: 0, height: 0 },
+            visible: {
+              opacity: 1,
+              height: "auto" as const,
+              transition: { duration: 0.3, ease: MENU_EASE },
+            },
+            exit: {
+              opacity: 0,
+              height: 0,
+              transition: { duration: 0.2, ease: MENU_EASE },
+            },
+          },
+    [reducedMotion],
+  );
 
   return (
     <nav
       aria-label="Main navigation"
-      className="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
+      className="fixed top-0 left-0 right-0 z-50 transition-[background-color,backdrop-filter,border-color] duration-300"
       style={{
         backgroundColor: scrolled ? "rgba(5, 5, 5, 0.85)" : "transparent",
         backdropFilter: scrolled ? "blur(12px)" : "none",
@@ -146,23 +151,14 @@ export function Navbar() {
             <button
               key={id}
               onClick={() => scrollToSection(id)}
-              className="text-sm font-medium transition-colors duration-200 py-3"
+              className={`text-sm font-medium transition-colors duration-200 py-3 ${
+                activeSection === id ? "" : "hover:text-white"
+              }`}
               style={{
                 color:
                   activeSection === id
                     ? "var(--ath-green)"
                     : "rgba(255, 255, 255, 0.6)",
-              }}
-              onMouseEnter={(e) => {
-                if (activeSection !== id) {
-                  e.currentTarget.style.color = "rgba(255, 255, 255, 1)";
-                }
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.color =
-                  activeSection === id
-                    ? "var(--ath-green)"
-                    : "rgba(255, 255, 255, 0.6)";
               }}
             >
               {t(`nav.${id}`)}
@@ -191,7 +187,7 @@ export function Navbar() {
           aria-label={mobileOpen ? "Close menu" : "Open menu"}
         >
           <span
-            className="block w-5 h-[2px] bg-white transition-all duration-300 origin-center"
+            className="block w-5 h-[2px] bg-white transition-[transform,opacity] duration-300 origin-center"
             style={{
               transform: mobileOpen
                 ? "translateY(3.5px) rotate(45deg)"
@@ -199,13 +195,13 @@ export function Navbar() {
             }}
           />
           <span
-            className="block w-5 h-[2px] bg-white transition-all duration-300"
+            className="block w-5 h-[2px] bg-white transition-[transform,opacity] duration-300"
             style={{
               opacity: mobileOpen ? 0 : 1,
             }}
           />
           <span
-            className="block w-5 h-[2px] bg-white transition-all duration-300 origin-center"
+            className="block w-5 h-[2px] bg-white transition-[transform,opacity] duration-300 origin-center"
             style={{
               transform: mobileOpen
                 ? "translateY(-3.5px) rotate(-45deg)"
@@ -230,6 +226,7 @@ export function Navbar() {
               backdropFilter: "blur(16px)",
               WebkitBackdropFilter: "blur(16px)",
               borderBottom: "1px solid rgba(255, 255, 255, 0.06)",
+              overscrollBehavior: "contain",
             }}
           >
             <div className="px-6 pb-6 pt-2 flex flex-col gap-1">

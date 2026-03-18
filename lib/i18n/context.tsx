@@ -21,8 +21,12 @@ function subscribeToLanguage(callback: () => void) {
 }
 
 function getLanguageSnapshot(): Language {
-  const stored = localStorage.getItem(STORAGE_KEY);
-  if (stored === "en" || stored === "es") return stored;
+  try {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (stored === "en" || stored === "es") return stored;
+  } catch {
+    // localStorage unavailable (incognito, disabled, quota exceeded)
+  }
   return "es";
 }
 
@@ -38,7 +42,11 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   );
 
   const setLanguage = useCallback((lang: Language) => {
-    localStorage.setItem(STORAGE_KEY, lang);
+    try {
+      localStorage.setItem(STORAGE_KEY, lang);
+    } catch {
+      // localStorage unavailable
+    }
     window.dispatchEvent(new Event(LANG_CHANGE_EVENT));
   }, []);
 

@@ -19,6 +19,7 @@ const AcademyIcon = () => (
     strokeWidth="1.5"
     strokeLinecap="round"
     strokeLinejoin="round"
+    aria-hidden="true"
   >
     <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
   </svg>
@@ -34,6 +35,7 @@ const MentorshipIcon = () => (
     strokeWidth="1.5"
     strokeLinecap="round"
     strokeLinejoin="round"
+    aria-hidden="true"
   >
     <circle cx="9" cy="12" r="6" />
     <circle cx="15" cy="12" r="6" />
