@@ -24,7 +24,7 @@ export const translations = {
 
     // About
     "about.label": "ORIGIN STORY",
-    "about.headline": "From Curious Trader to Crypto Educator",
+    "about.headline": "From Passionate Enthusiast to Global Digital Asset Advisor",
     "about.p1": "With over 10 years of experience in crypto and blockchain, I created the first NFT collection in Costa Rica and have been a panelist at Blockchain Jungle. I combine my expertise in Web3 and digital marketing to take people from 0 to 100 in the crypto world.",
     "about.p2": "Through the Technological Translation Method, I transform complex concepts into simple language and apply them practically to generate extraordinary returns. No jargon walls, no gatekeeping\u2014just clear knowledge you can act on immediately.",
     "about.p3": "A Gold Effie Award winner and ULACIT graduate, my innovative vision drives the educational mission of All Time High\u2014shaping the next generation of crypto experts.",
@@ -172,7 +172,7 @@ export const translations = {
 
     // About
     "about.label": "MI HISTORIA",
-    "about.headline": "De Trader Curioso a Educador Crypto",
+    "about.headline": "De Entusiasta Apasionado a Asesor en Activos Digitales a Nivel Mundial",
     "about.p1": "Con m\u00e1s de 10 a\u00f1os de experiencia en crypto y blockchain, cre\u00e9 la primera colecci\u00f3n de NFTs en Costa Rica y he sido panelista en Blockchain Jungle. Combino mi experiencia en Web3 y marketing digital para llevar a las personas de 0 a 100 en el mundo crypto.",
     "about.p2": "A trav\u00e9s del M\u00e9todo de Traducci\u00f3n Tecnol\u00f3gica, transformo conceptos complejos en lenguaje simple y los aplico de forma pr\u00e1ctica para generar retornos extraordinarios. Sin jerga, sin exclusividad\u2014solo conocimiento claro que puedes aplicar de inmediato.",
     "about.p3": "Ganador del Gold Effie Award y graduado de ULACIT, mi visi\u00f3n innovadora impulsa la misi\u00f3n educativa de All Time High\u2014formando la pr\u00f3xima generaci\u00f3n de expertos en crypto.",
