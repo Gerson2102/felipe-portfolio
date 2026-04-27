@@ -29,12 +29,4 @@ export const blurMap: Record<string, string> = {
   "/images/carousel/felipe-startup-house.webp": "data:image/webp;base64,UklGRkAAAABXRUJQVlA4IDQAAADQAQCdASoIAAUABUB8JZgC7AD0Ma5VgAD9sxd2Q+nlBOX/8ffB2Ur9HsxYe0SuKIckzFQA",
   "/images/carousel/felipe-storms.webp": "data:image/webp;base64,UklGRjQAAABXRUJQVlA4ICgAAACwAQCdASoIAAUABUB8JZwAAxfk7wIAAP6tAaZ5CwSyXIv+sUeADTAA",
   "/images/carousel/ny-times-banks.webp": "data:image/webp;base64,UklGRjAAAABXRUJQVlA4ICQAAACwAQCdASoIAAUABUB8JZwAAudR654AAP6xRxLgoHLiEaUIAAA=",
-  "/images/connections/ath-bj3.webp": "data:image/webp;base64,UklGRiwAAABXRUJQVlA4ICAAAACwAQCdASoDAAYABUB8JZwAAudkGViAAP7u5pObwugAAA==",
-  "/images/connections/felipe-jack-mallers.webp": "data:image/webp;base64,UklGRjIAAABXRUJQVlA4ICYAAACwAQCdASoEAAYABUB8JZwAAveIsyCAAP2jwEzs3pPanqUVWAAAAA==",
-  "/images/connections/felipe-missuniverse.webp": "data:image/webp;base64,UklGRjoAAABXRUJQVlA4IC4AAADQAQCdASoGAAYABUB8JYwC7AEPDU4tYAD+Jccj6ail23eiO6NPZtc0lfOGAAAA",
-  "/images/connections/felipe-missuniverse5.webp": "data:image/webp;base64,UklGRjoAAABXRUJQVlA4IC4AAADQAQCdASoIAAYABUB8JZQC7AD0Oh1oQAD7BXyUjcsUH4gMrSRn0/gawmBOgcAA",
-  "/images/connections/felipe-missuniverse6.webp": "data:image/webp;base64,UklGRjAAAABXRUJQVlA4ICQAAACQAQCdASoDAAYABUB8JYwAAudLYMAA+pHJdhqUEZRRhrEvAAA=",
-  "/images/connections/felipe-paolo-ardoino.webp": "data:image/webp;base64,UklGRjQAAABXRUJQVlA4ICgAAACwAQCdASoEAAYABUB8JZQC7AEO/aaQAPoPolRt1bJuysVohY1KOwAA",
-  "/images/connections/felipe-speaking6.webp": "data:image/webp;base64,UklGRj4AAABXRUJQVlA4IDIAAACwAQCdASoIAAUABUB8JQBOgB6PVVZAAP5+J787PE9Wr/kULidgLKHQIk8kptea+MgAAA==",
-  "/images/connections/felipe-startup-house.webp": "data:image/webp;base64,UklGRkAAAABXRUJQVlA4IDQAAADQAQCdASoIAAUABUB8JZgC7AD0Ma5VgAD9sxd2Q+nlBOX/8ffB2Ur9HsxYe0SuKIckzFQA",
 };

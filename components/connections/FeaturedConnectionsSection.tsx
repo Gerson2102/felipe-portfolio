@@ -15,13 +15,13 @@ interface ConnectionMeta {
 }
 
 const connectionsMeta: ConnectionMeta[] = [
-  { src: "/images/connections/felipe-paolo-ardoino.webp", alt: "Felipe with Paolo Ardoino, CEO of Tether", objectPosition: "center top" },
-  { src: "/images/connections/felipe-jack-mallers.webp", alt: "Felipe with Jack Mallers, CEO of Strike", objectPosition: "center center" },
-  { src: "/images/connections/felipe-missuniverse5.webp", alt: "Felipe Esparrag\u00f3 at the 73rd Miss Universe stage", objectPosition: "center center" },
-  { src: "/images/connections/felipe-missuniverse6.webp", alt: "Felipe presenting Crowns of Time NFT to Miss Universe winner", objectPosition: "center top" },
-  { src: "/images/connections/felipe-startup-house.webp", alt: "Felipe at Dojo Coding x Starknet event", objectPosition: "center center", aspectRatio: "4/3" },
-  { src: "/images/connections/ath-bj3.webp", alt: "Felipe Esparrag\u00f3 speaking at Blockchain Jungle on the Liana Stage", objectPosition: "center center" },
-  { src: "/images/connections/felipe-speaking6.webp", alt: "Felipe at industry networking event", objectPosition: "center top" },
+  { src: "/images/carousel/felipe-paolo-ardoino.webp", alt: "Felipe with Paolo Ardoino, CEO of Tether", objectPosition: "center top" },
+  { src: "/images/carousel/felipe-jack-mallers.webp", alt: "Felipe with Jack Mallers, CEO of Strike", objectPosition: "center center" },
+  { src: "/images/carousel/felipe-missuniverse5.webp", alt: "Felipe Esparrag\u00f3 at the 73rd Miss Universe stage", objectPosition: "center center" },
+  { src: "/images/carousel/felipe-missuniverse6.webp", alt: "Felipe presenting Crowns of Time NFT to Miss Universe winner", objectPosition: "center top" },
+  { src: "/images/carousel/felipe-startup-house.webp", alt: "Felipe at Dojo Coding x Starknet event", objectPosition: "center center", aspectRatio: "4/3" },
+  { src: "/images/carousel/ath-bj3.webp", alt: "Felipe Esparrag\u00f3 speaking at Blockchain Jungle on the Liana Stage", objectPosition: "center center" },
+  { src: "/images/carousel/felipe-speaking6.webp", alt: "Felipe at industry networking event", objectPosition: "center top" },
 ];
 
 export function FeaturedConnectionsSection() {
@@ -127,7 +127,7 @@ export function FeaturedConnectionsSection() {
     startXRef.current = e.pageX - container.offsetLeft;
     scrollLeftRef.current = container.scrollLeft;
     container.style.userSelect = "none";
-    (container.style as unknown as Record<string, string>).webkitUserSelect = "none";
+    container.style.webkitUserSelect = "none";
   };
 
   const handleMouseMove = (e: React.MouseEvent) => {
@@ -143,7 +143,7 @@ export function FeaturedConnectionsSection() {
     const container = scrollContainerRef.current;
     if (container) {
       container.style.userSelect = "";
-      (container.style as unknown as Record<string, string>).webkitUserSelect = "";
+      container.style.webkitUserSelect = "";
     }
   };
 
