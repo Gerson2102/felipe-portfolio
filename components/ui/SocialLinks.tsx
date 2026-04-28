@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { ATH_LINKS } from "@/lib/links";
 
 interface SocialLinksProps {
   isInView: boolean;
@@ -57,7 +58,7 @@ const XIcon = () => (
 );
 
 const socialLinks = [
-  { name: "Instagram", icon: InstagramIcon, href: "https://www.instagram.com/fesparrago.ath/" },
+  { name: "Instagram", icon: InstagramIcon, href: ATH_LINKS.instagram },
   { name: "LinkedIn", icon: LinkedInIcon, href: "https://www.linkedin.com/in/felipe-esparrag%C3%B3-0a50a0123/" },
   { name: "X", icon: XIcon, href: "https://x.com/fesparrago07" },
 ];

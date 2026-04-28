@@ -7,6 +7,7 @@ import { CTABackground } from "./CTABackground";
 import { PathCard } from "./PathCard";
 import { RevealText } from "@/components/ui/RevealText";
 import { SocialLinks } from "@/components/ui/SocialLinks";
+import { ATH_LINKS } from "@/lib/links";
 
 // Icons
 const AcademyIcon = () => (
@@ -54,7 +55,7 @@ export function FinalCTASection() {
     description: t("cta.academy.description"),
     ctaText: t("cta.academy.cta"),
     ctaVariant: "filled" as const,
-    ctaHref: "https://go.alltimehigh.academy/",
+    ctaHref: ATH_LINKS.academy,
   };
 
   const mentorshipCard = {
@@ -63,7 +64,7 @@ export function FinalCTASection() {
     description: t("cta.mentorship.description"),
     ctaText: t("cta.mentorship.cta"),
     ctaVariant: "outline" as const,
-    ctaHref: "https://www.instagram.com/fesparrago.ath/",
+    ctaHref: ATH_LINKS.instagram,
   };
 
   return (

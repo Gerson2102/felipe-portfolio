@@ -5,6 +5,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { ShineButton } from "@/components/ui/ShineButton";
 import { LanguageToggle } from "@/components/ui/LanguageToggle";
 import { useLanguage } from "@/lib/i18n/context";
+import { ATH_LINKS } from "@/lib/links";
 
 const NAV_IDS = ["about", "testimonials", "services", "connections", "faq"] as const;
 
@@ -171,7 +172,7 @@ export function Navbar() {
           <LanguageToggle />
           <ShineButton
             variant="filled"
-            href="https://go.alltimehigh.academy/"
+            href={ATH_LINKS.academy}
             className="!px-5 !py-2.5 !text-sm !rounded-lg"
           >
             {t("nav.cta")}
@@ -251,7 +252,7 @@ export function Navbar() {
               <div className="pt-3">
                 <ShineButton
                   variant="filled"
-                  href="https://go.alltimehigh.academy/"
+                  href={ATH_LINKS.academy}
                   className="!w-full !px-5 !py-3 !text-sm !rounded-lg"
                 >
                   {t("nav.cta")}

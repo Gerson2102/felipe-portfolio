@@ -6,6 +6,7 @@ import { AnimatedBackground } from "./AnimatedBackground";
 import { TypingText } from "./TypingText";
 import { ShineButton } from "@/components/ui/ShineButton";
 import { useLanguage } from "@/lib/i18n/context";
+import { ATH_LINKS } from "@/lib/links";
 
 export function HeroSection() {
   const { language, t } = useLanguage();
@@ -78,7 +79,7 @@ export function HeroSection() {
             >
               <ShineButton
                 variant="filled"
-                href="https://go.alltimehigh.academy/"
+                href={ATH_LINKS.academy}
               >
                 {t("hero.cta")}
               </ShineButton>

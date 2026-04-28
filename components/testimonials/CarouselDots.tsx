@@ -17,10 +17,9 @@ export function CarouselDots({ total, current, onSelect }: CarouselDotsProps) {
           onClick={() => onSelect(index)}
           className="relative flex items-center justify-center min-h-[44px] min-w-[44px] focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 rounded-full"
           style={{
-            // @ts-expect-error CSS custom properties
             "--tw-ring-color": "var(--ath-green)",
             "--tw-ring-offset-color": "var(--hero-bg-base)",
-          }}
+          } as React.CSSProperties}
           role="tab"
           aria-selected={index === current}
           aria-label={`Go to testimonial ${index + 1}`}

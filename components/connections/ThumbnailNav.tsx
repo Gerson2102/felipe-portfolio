@@ -24,10 +24,9 @@ export function ThumbnailNav({ photos, currentIndex, onSelect }: ThumbnailNavPro
           aria-selected={index === currentIndex}
           className="relative rounded-lg overflow-hidden focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
           style={{
-            // @ts-expect-error CSS custom properties
             "--tw-ring-color": "var(--ath-green)",
             "--tw-ring-offset-color": "var(--hero-bg-base)",
-          }}
+          } as React.CSSProperties}
           aria-label={`Go to photo ${index + 1}`}
         >
           <motion.div
